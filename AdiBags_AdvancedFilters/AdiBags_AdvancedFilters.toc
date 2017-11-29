@@ -1,0 +1,10 @@
+## Interface: 70300
+
+## Title: AdiBags Extended Filters
+## Notes: Adds an extra filters to AdiBags.
+## Author: Dullaran
+## Version: 1.0
+## Dependencies: AdiBags
+
+Localization.lua
+AdiBags_AdvancedFilters.lua
