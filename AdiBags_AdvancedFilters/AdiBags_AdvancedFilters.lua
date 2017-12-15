@@ -1,8 +1,7 @@
-local AddonName, AddonTable = ...
-local L = AddonTable.L
+local addonName, addon = ...
 
---AdiBags filters
 local AdiBags = LibStub("AceAddon-3.0"):GetAddon("AdiBags")
+local L = addon.L
 
 -- Textos
 local FILTER_NAME = 'Advanced Item Filter'
@@ -112,119 +111,201 @@ local CONS = {
     ['T_WEAPON_ENCHANTMENTS_ID'] = 'ID107',
     ['T_OTHER_ID'] = 'ID108',
 
-    -- Custom
-    ['CT_ANIMAL_ID'] = 'ID109',
-    ['CT_EGG_ID'] = 'ID110',
-    ['CT_FISH_ID'] = 'ID111',
-
-    ['CT_FISHING_ID'] = 'ID112',
-
     -- Professions category
-    ['P_ALCHEMY_ID'] = 'ID113',
-    ['P_BLACKSMITHING_ID'] = 'ID114',
-    ['P_ENCHANTING_ID'] = 'ID115',
-    ['P_ENGINEERING_ID'] = 'ID116',
-    ['P_HERBALISM_ID'] = 'ID117',
-    ['P_INSCRIPTION_ID'] = 'ID118',
-    ['P_JEWELCRAFTING_ID'] = 'ID119',
-    ['P_LEATHERWORKING_ID'] = 'ID120',
-    ['P_MINING_ID'] = 'ID121',
-    ['P_SKINNING_ID'] = 'ID122',
-    ['P_TAILORING_ID'] = 'ID123',
-    ['P_ARCHAEOLOGY_ID'] = 'ID124',
-    ['P_COOKING_ID'] = 'ID125',
-    ['P_FIRST_AID_ID'] = 'ID126',
-    ['P_FISHING_ID'] = 'ID127',
-    ['P_RIDING_ID'] = 'ID128',
+    ['P_ALCHEMY_ID'] = 'ID109',
+    ['P_BLACKSMITHING_ID'] = 'ID110',
+    ['P_ENCHANTING_ID'] = 'ID111',
+    ['P_ENGINEERING_ID'] = 'ID112',
+    ['P_HERBALISM_ID'] = 'ID113',
+    ['P_INSCRIPTION_ID'] = 'ID114',
+    ['P_JEWELCRAFTING_ID'] = 'ID115',
+    ['P_LEATHERWORKING_ID'] = 'ID116',
+    ['P_MINING_ID'] = 'ID117',
+    ['P_SKINNING_ID'] = 'ID118',
+    ['P_TAILORING_ID'] = 'ID119',
+    ['P_ARCHAEOLOGY_ID'] = 'ID120',
+    ['P_COOKING_ID'] = 'ID121',
+    ['P_FIRST_AID_ID'] = 'ID122',
+    ['P_FISHING_ID'] = 'ID123',
+    ['P_RIDING_ID'] = 'ID124',
+
+
+    -- Custom
+    ['M_ARCHAEOLOGY_ID'] = 'ID125',
+    ['MA_ARTIFACT_ID'] = 'ID145',
+    ['MA_CRATES_ID'] = 'ID144',
+    ['MA_KEY_STONES_ID'] = 'ID126',
+    ['MA_QUEST_ID'] = 'ID127',
+    ['MA_OTHERS_ID'] = 'ID128',
+    ['M_TELEPORT_ID'] = 'ID129',
+    ['MT_HEARTSTONE_ID'] = 'ID130',
+    ['MT_ARMOR_ID'] = 'ID131',
+    ['MT_JEWELRY_ID'] = 'ID132',
+    ['MT_QUEST_ID'] = 'ID133',
+    ['MT_SCROLLS_ID'] = 'ID134',
+    ['MT_TOYS_ID'] = 'ID135',
+    ['MT_WHISTLE_ID'] = 'ID136',
+
+    ['MH_DARKMOON_ID'] = 'ID146',
+
+    ['T_FISHING_ID'] = 'ID137',
+    ['TF_POLES_ID'] = 'ID138',
+    ['TF_HATS_ID'] = 'ID139',
+    ['TF_OTHERS_ID'] = 'ID140',
+    ['TM_ANIMAL_ID'] = 'ID141',
+    ['TM_EGG_ID'] = 'ID142',
+    ['TM_FISH_ID'] = 'ID143',
 
     -- All expansions category
-    ['PET_BATTLE_STONE_ID'] = 'ID129',
-    ['PET_CONSUMABLE_ID'] = 'ID130',
-    ['PET_SUPPLIES_ID'] = 'ID131',
-    ['PET_TRAINING_STONE_ID'] = 'ID132'
+    ['MC_BATTLE_STONE_ID'] = 'ID148',
+    ['MC_CONSUMABLE_ID'] = 'ID149',
+    ['MC_SUPPLIES_ID'] = 'ID150',
+    ['MC_TRAINING_STONE_ID'] = 'ID151',
+
+    -- Legion
+    ['ORDER_HALL_ID'] = '161',
+    ['O_CHAMPION_ARMOR_ID'] = '162',
+    ['O_CHAMPION_EQUIPMENT_ID'] = '163',
+    ['O_CHESTS_ID'] = '164',
+    ['O_CONSUMABLES_ID'] = '165',
+    ['O_TROOPS_ID'] = '166',
+
+    -- Warlords of Draenor
+    ['GARRISON_ID'] = 'ID152',
+    ['G_BLUEPRINTS_ID'] = 'ID153',
+    ['G_FOLLOWERS_ID'] = 'ID154',
+    ['G_IRONHORDE_ID'] = 'ID155',
+    ['G_MINING_ID'] = 'ID156',
+    ['G_SHIPYARD_ID'] = 'ID157',
+    ['G_WORKORDERS_ID'] = 'ID158',
+
+    ['ASHRAN_ID'] = 'ID159',
+    ['A_BOOKS_ID'] = 'ID160',
 }
-local EXPANSIONS_LIST = {
-    CONS.CLASSIC_ID, 
-    CONS.THE_BURNING_CRUSADE_ID, 
-    CONS.WRATH_OF_THE_LICH_KING_ID, 
-    CONS.CATACLYSM_ID, 
-    CONS.MISTS_OF_PANDARIA_ID, 
-    CONS.WARLORDS_OF_DRAENOR_ID, 
-    CONS.LEGION_ID, 
-    CONS.BATTLE_FOR_AZEROTH_ID
-}
-local CATEGORY_LIST = {
-    CONS.CONTAINERS_ID,
-    CONS.CONSUMABLES_ID, 
-    CONS.CURRENCY_ID,
-    CONS.GEMS_ID,
-    CONS.GLYPHS_ID,
-    CONS.KEYS_ID,
-    CONS.MISCELLANEOUS_ID,
-    CONS.QUEST_ID, 
-    CONS.RECIPES_ID, 
-    CONS.TRADE_GOODS_ID
-}
-local CATEGORY_HAS_SUBCATEGORY = {
-    [CONS.CONSUMABLES_ID] = {
-        CONS.C_BANDAGES_ID,
-        CONS.C_CONSUMABLES_ID,
-        CONS.C_ELIXIRS_ID,
-        CONS.C_FLASKS_ID,
-        CONS.C_FOOD_DRINKS_ID,
-        CONS.C_ITEM_ENHANCEMENTS_ID,
-        CONS.C_POTIONS_ID,
-        CONS.C_SCROLLS_ID,
-        CONS.C_OTHER_ID},
-    [CONS.GEMS_ID] = {CONS.G_RELIC_ID},
-    [CONS.MISCELLANEOUS_ID] = {
-        CONS.M_ARMOR_TOKENS_ID,
-        CONS.M_HOLIDAY_ID,
-        CONS.M_REAGENTS_ID,
-        CONS.M_MOUNTS_ID,
-        CONS.M_COMPANIONS_ID,
-        CONS.M_OTHER_ID
-    },
-    [CONS.RECIPES_ID] = {
-        CONS.R_BOOKS_ID,
-        CONS.R_ALCHEMY_ID,
-        CONS.R_BLACKSMITHING_ID,
-        CONS.R_COOKING_ID,
-        CONS.R_ENCHANTING_ID,
-        CONS.R_ENGINEERING_ID,
-        CONS.R_FIRST_AID_ID,
-        CONS.R_FISHING_ID,
-        CONS.R_INSCRIPTIONS_ID,
-        CONS.R_JEWELCRAFTING_ID,
-        CONS.R_LEATHERWORKING_ID,
-        CONS.R_MINING_ID,
-        CONS.R_TAILORING_ID
-    },
-    [CONS.TRADE_GOODS_ID] = {
-        CONS.T_ARMOR_ENCHANTMENTS_ID, 
-        CONS.T_CLOTH_ID, 
-        CONS.T_DEVICES_ID, 
-        CONS.T_ELEMENTAL_ID, 
-        CONS.T_ENCHANTING_ID, 
-        CONS.T_EXPLOSIVES_ID, 
-        CONS.T_HERBS_ID, 
-        CONS.T_JEWELCRAFTING_ID,
-        CONS.T_LEATHER_ID,
-        CONS.T_MATERIALS_ID,
-        CONS.T_MEAT_ID,
-        CONS.T_METAL_STONE_ID,
-        CONS.T_PARTS_ID,
-        CONS.T_WEAPON_ENCHANTMENTS_ID,
-        CONS.T_OTHER_ID,
-        CONS.CT_FISHING_ID},
-    [CONS.T_MEAT_ID] = {CONS.CT_ANIMAL_ID, CONS.CT_EGG_ID, CONS.CT_FISH_ID},
-    [CONS.M_COMPANIONS_ID] = {CONS.PET_BATTLE_STONE_ID, CONS.PET_CONSUMABLE_ID, CONS.PET_SUPPLIES_ID, CONS.PET_TRAINING_STONE_ID},
-}
-local EXPANSION_IDEPENDENDT_CATEGORY_LIST = {}
-local EXPANSION_SPECIFIC_SUBCATEGORY = {[CONS.WARLORDS_OF_DRAENOR_ID] = {GARRISON_ID, ASHRAN_ID}}
+
+local RULES = {
+    ['EXPANSIONS_LIST'] = {
+        CONS.CLASSIC_ID, 
+        CONS.THE_BURNING_CRUSADE_ID, 
+        CONS.WRATH_OF_THE_LICH_KING_ID, 
+        CONS.CATACLYSM_ID, 
+        CONS.MISTS_OF_PANDARIA_ID, 
+        CONS.WARLORDS_OF_DRAENOR_ID, 
+        CONS.LEGION_ID},
+    ['CATEGORY_LIST'] = {
+        CONS.CONTAINERS_ID,
+        CONS.CONSUMABLES_ID, 
+        CONS.CURRENCY_ID,
+        CONS.GEMS_ID,
+        CONS.GLYPHS_ID,
+        CONS.KEYS_ID,
+        CONS.MISCELLANEOUS_ID,
+        CONS.QUEST_ID, 
+        CONS.RECIPES_ID, 
+        CONS.TRADE_GOODS_ID},
+    ['CATEGORY_HAS_SUBCATEGORY'] = {
+        [CONS.CONSUMABLES_ID] = {
+            CONS.C_BANDAGES_ID,
+            CONS.C_CONSUMABLES_ID,
+            CONS.C_ELIXIRS_ID,
+            CONS.C_FLASKS_ID,
+            CONS.C_FOOD_DRINKS_ID,
+            CONS.C_ITEM_ENHANCEMENTS_ID,
+            CONS.C_POTIONS_ID,
+            CONS.C_SCROLLS_ID,
+            CONS.C_OTHER_ID},
+        [CONS.GEMS_ID] = {CONS.G_RELIC_ID},
+        [CONS.MISCELLANEOUS_ID] = {
+            CONS.M_ARMOR_TOKENS_ID,
+            CONS.M_HOLIDAY_ID,
+            CONS.M_REAGENTS_ID,
+            CONS.M_MOUNTS_ID,
+            CONS.M_COMPANIONS_ID,
+            CONS.M_TELEPORT_ID,
+            CONS.M_ARCHAEOLOGY_ID,
+            CONS.M_OTHER_ID},
+        [CONS.RECIPES_ID] = {
+            CONS.R_BOOKS_ID,
+            CONS.R_ALCHEMY_ID,
+            CONS.R_BLACKSMITHING_ID,
+            CONS.R_COOKING_ID,
+            CONS.R_ENCHANTING_ID,
+            CONS.R_ENGINEERING_ID,
+            CONS.R_FIRST_AID_ID,
+            CONS.R_FISHING_ID,
+            CONS.R_INSCRIPTIONS_ID,
+            CONS.R_JEWELCRAFTING_ID,
+            CONS.R_LEATHERWORKING_ID,
+            CONS.R_MINING_ID,
+            CONS.R_TAILORING_ID},
+        [CONS.TRADE_GOODS_ID] = {
+            CONS.T_ARMOR_ENCHANTMENTS_ID, 
+            CONS.T_CLOTH_ID, 
+            CONS.T_DEVICES_ID, 
+            CONS.T_ELEMENTAL_ID, 
+            CONS.T_ENCHANTING_ID, 
+            CONS.T_EXPLOSIVES_ID, 
+            CONS.T_HERBS_ID, 
+            CONS.T_JEWELCRAFTING_ID,
+            CONS.T_LEATHER_ID,
+            CONS.T_MATERIALS_ID,
+            CONS.T_MEAT_ID,
+            CONS.T_METAL_STONE_ID,
+            CONS.T_PARTS_ID,
+            CONS.T_WEAPON_ENCHANTMENTS_ID,
+            CONS.T_OTHER_ID,
+            CONS.T_FISHING_ID},
+        [CONS.M_COMPANIONS_ID] = {
+            CONS.MC_BATTLE_STONE_ID, 
+            CONS.MC_CONSUMABLE_ID, 
+            CONS.MC_SUPPLIES_ID, 
+            CONS.MC_TRAINING_STONE_ID},
+        [CONS.M_HOLIDAY_ID] = {
+            CONS.MH_DARKMOON_ID},
+        [CONS.M_TELEPORT_ID] = {
+            CONS.MT_HEARTSTONE_ID,
+            CONS.MT_ARMOR_ID,
+            CONS.MT_JEWELRY_ID,
+            CONS.MT_QUEST_ID,
+            CONS.MT_SCROLLS_ID,
+            CONS.MT_TOYS_ID,
+            CONS.MT_WHISTLE_ID},
+        [CONS.M_ARCHAEOLOGY_ID] = {
+            CONS.MA_CRATES_ID,
+            CONS.MA_ARTIFACT_ID,
+            CONS.MA_KEY_STONES_ID,
+            CONS.MA_QUEST_ID,
+            CONS.MA_OTHERS_ID},
+        [CONS.T_FISHING_ID] = {
+            CONS.TF_POLES_ID, 
+            CONS.TF_HATS_ID, 
+            CONS.TF_OTHERS_ID},
+        [CONS.T_MEAT_ID] = {
+            CONS.TM_ANIMAL_ID, 
+            CONS.TM_EGG_ID, 
+            CONS.TM_FISH_ID},
+        [CONS.ORDER_HALL_ID] = {
+            CONS.O_CHAMPION_ARMOR_ID,
+            CONS.O_CHAMPION_EQUIPMENT_ID,
+            CONS.O_CHESTS_ID,
+            CONS.O_CONSUMABLES_ID,
+            CONS.O_TROOPS_ID},
+        [CONS.GARRISON_ID] = {
+            CONS.G_BLUEPRINTS_ID,
+            CONS.G_FOLLOWERS_ID,
+            CONS.G_IRONHORDE_ID,
+            CONS.G_MINING_ID,
+            CONS.G_SHIPYARD_ID,
+            CONS.G_WORKORDERS_ID},
+        [CONS.ASHRAN_ID] = {CONS.A_BOOKS_ID}},
+
+    ['EXPANSION_IDEPENDENDT_CATEGORY_LIST'] = {},
+    ['EXPANSION_SPECIFIC_SUBCATEGORY'] = {
+        [CONS.LEGION_ID] = {CONS.ORDER_HALL_ID},
+        [CONS.WARLORDS_OF_DRAENOR_ID] = {CONS.GARRISON_ID, CONS.ASHRAN_ID}}}
 
 local Label_Expansions_Text = {
-    [CONS.CLASSIC_ID] = 'CLS',
+    [CONS.CLASSIC_ID] = 'Classic',
     [CONS.THE_BURNING_CRUSADE_ID] = 'TBC',
     [CONS.WRATH_OF_THE_LICH_KING_ID] = 'WotLK',
     [CONS.CATACLYSM_ID] = 'CTC',
@@ -235,138 +316,180 @@ local Label_Expansions_Text = {
 
 local Label_Text = {
         -- Constantes
-    [CONS.CLASSIC_ID] = 'Classic',
-    [CONS.THE_BURNING_CRUSADE_ID] = 'The Burning Crusade',
-    [CONS.WRATH_OF_THE_LICH_KING_ID] = 'Wrath of the Lich King',
-    [CONS.CATACLYSM_ID] = 'Cataclysm',
-    [CONS.MISTS_OF_PANDARIA_ID] = 'Mists of Pandaria',
-    [CONS.WARLORDS_OF_DRAENOR_ID] = 'Warlords of Draenor',
-    [CONS.LEGION_ID] = 'Legion',
-    [CONS.BATTLE_FOR_AZEROTH_ID] = 'Battle for Azeroth',
-    [CONS.OTHER_ID] = 'Other',
-    [CONS.OLD_EXPANSIONS_ID] = 'Old Expansions',
+    [CONS.CLASSIC_ID] = L['Classic'],
+    [CONS.THE_BURNING_CRUSADE_ID] = L['The Burning Crusade'],
+    [CONS.WRATH_OF_THE_LICH_KING_ID] = L['Wrath of the Lich King'],
+    [CONS.CATACLYSM_ID] = L['Cataclysm'],
+    [CONS.MISTS_OF_PANDARIA_ID] = L['Mists of Pandaria'],
+    [CONS.WARLORDS_OF_DRAENOR_ID] = L['Warlords of Draenor'],
+    [CONS.LEGION_ID] = L['Legion'],
+    [CONS.BATTLE_FOR_AZEROTH_ID] = L['Battle for Azeroth'],
+    [CONS.OTHER_ID] = L['Other'],
+    [CONS.OLD_EXPANSIONS_ID] = L['Old Expansions'],
 
     -- Items
-    [CONS.WEAPONS_ID] = 'Weapons',
-    [CONS.ARMOR_ID] = 'Armors',
-    [CONS.CONTAINERS_ID] = 'Containers',
-    [CONS.CONSUMABLES_ID] = 'Consumables',
-    [CONS.CURRENCY_ID] = 'Currency',
-    [CONS.GEMS_ID] = 'Gems',
-    [CONS.GLYPHS_ID] = 'Glyphs',
-    [CONS.KEYS_ID] = 'Keys',
-    [CONS.MISCELLANEOUS_ID] = 'Miscellaneous',
-    [CONS.QUEST_ID] = 'Quest',
-    [CONS.RECIPES_ID] = 'Recipes',
-    [CONS.TRADE_GOODS_ID] = 'Trade Goods',
+    [CONS.WEAPONS_ID] = L['Weapons'],
+    [CONS.ARMOR_ID] = L['Armors'],
+    [CONS.CONTAINERS_ID] = L['Containers'],
+    [CONS.CONSUMABLES_ID] = L['Consumables'],
+    [CONS.CURRENCY_ID] = L['Currency'],
+    [CONS.GEMS_ID] = L['Gems'],
+    [CONS.GLYPHS_ID] = L['Glyphs'],
+    [CONS.KEYS_ID] = L['Keys'],
+    [CONS.MISCELLANEOUS_ID] = L['Miscellaneous'],
+    [CONS.QUEST_ID] = L['Quest'],
+    [CONS.RECIPES_ID] = L['Recipes'],
+    [CONS.TRADE_GOODS_ID] = L['Trade Goods'],
 
     -- Consumable category
-    [CONS.C_BANDAGES_ID] = 'Bandages',
-    [CONS.C_CONSUMABLES_ID] = 'Consumables',
-    [CONS.C_ELIXIRS_ID] = 'Elixirs',
-    [CONS.C_FLASKS_ID] = 'Flasks',
-    [CONS.C_FOOD_DRINKS_ID] = 'Food & Drinks',
-    [CONS.C_ITEM_ENHANCEMENTS_ID] = 'Item Enchantments',
-    [CONS.C_POTIONS_ID] = 'Potions',
-    [CONS.C_SCROLLS_ID] = 'Scrolls',
-    [CONS.C_OTHER_ID] = 'Other',
+    [CONS.C_BANDAGES_ID] = L['Bandages'],
+    [CONS.C_CONSUMABLES_ID] = L['Consumables'],
+    [CONS.C_ELIXIRS_ID] = L['Elixirs'],
+    [CONS.C_FLASKS_ID] = L['Flasks'],
+    [CONS.C_FOOD_DRINKS_ID] = L['Food & Drinks'],
+    [CONS.C_ITEM_ENHANCEMENTS_ID] = L['Item Enchantments'],
+    [CONS.C_POTIONS_ID] = L['Potions'],
+    [CONS.C_SCROLLS_ID] = L['Scrolls'],
+    [CONS.C_OTHER_ID] = L['Other'],
 
-    [CONS.G_COLOR_ID] = 'Colored Gems',
-    [CONS.G_RELIC_ID] = 'Relic',
-    [CONS.G_SIMPLE_ID] = 'Simple Gems',
+    [CONS.G_COLOR_ID] = L['Colored Gems'],
+    [CONS.G_RELIC_ID] = L['Relic'],
+    [CONS.G_SIMPLE_ID] = L['Simple Gems'],
 
-    [CONS.GC_META_ID] = 'Meta',
-    [CONS.GC_RED_ID] = 'Red',
-    [CONS.GC_BLUE_ID] = 'Blue',
-    [CONS.GC_YELLOW_ID] = 'Yellow',
-    [CONS.GC_PURPLE_ID] = 'Purple',
-    [CONS.GC_GREEN_ID] = 'Green',
-    [CONS.GC_ORANGE_ID] = 'Orange',
-    [CONS.GC_PRISMATIC_ID] = 'Prismatic',
-    [CONS.GC_SHA_TOUCHED_ID] = 'Sha-Touched',
-    [CONS.GC_COGWHEEL_ID] = 'Cogwheel',
+    [CONS.GC_META_ID] = L['Meta'],
+    [CONS.GC_RED_ID] = L['Red'],
+    [CONS.GC_BLUE_ID] = L['Blue'],
+    [CONS.GC_YELLOW_ID] = L['Yellow'],
+    [CONS.GC_PURPLE_ID] = L['Purple'],
+    [CONS.GC_GREEN_ID] = L['Green'],
+    [CONS.GC_ORANGE_ID] = L['Orange'],
+    [CONS.GC_PRISMATIC_ID] = L['Prismatic'],
+    [CONS.GC_SHA_TOUCHED_ID] = L['Sha-Touched'],
+    [CONS.GC_COGWHEEL_ID] = L['Cogwheel'],
 
-    [CONS.GR_Arcane_ID] = 'Arcane Relic',
-    [CONS.GR_Blood_ID] = 'Blood Relic',
-    [CONS.GR_Fel_ID] = 'Fel Relic',
-    [CONS.GR_Fire_ID] = 'Fire Relic',
-    [CONS.GR_Frot_ID] = 'Frost Relic',
-    [CONS.GR_Holy_ID] = 'Holy Relic',
-    [CONS.GR_Iron_ID] = 'Iron Relic',
-    [CONS.GR_Life_ID] = 'Life Relic',
-    [CONS.GR_Shadow_ID] = 'Shadow Relic',
-    [CONS.GR_Water_ID] = 'Water Relic',
-    [CONS.GR_Storm_ID] = 'Storm Relic',
+    [CONS.GR_Arcane_ID] = L['Arcane Relic'],
+    [CONS.GR_Blood_ID] = L['Blood Relic'],
+    [CONS.GR_Fel_ID] = L['Fel Relic'],
+    [CONS.GR_Fire_ID] = L['Fire Relic'],
+    [CONS.GR_Frot_ID] = L['Frost Relic'],
+    [CONS.GR_Holy_ID] = L['Holy Relic'],
+    [CONS.GR_Iron_ID] = L['Iron Relic'],
+    [CONS.GR_Life_ID] = L['Life Relic'],
+    [CONS.GR_Shadow_ID] = L['Shadow Relic'],
+    [CONS.GR_Water_ID] = L['Water Relic'],
+    [CONS.GR_Storm_ID] = L['Storm Relic'],
 
-    [CONS.M_ARMOR_TOKENS_ID] = 'Armor Tokens',
-    [CONS.M_HOLIDAY_ID] = 'Holiday',
-    [CONS.M_REAGENTS_ID] = 'Reagents',
-    [CONS.M_MOUNTS_ID] = 'Mounts',
-    [CONS.M_COMPANIONS_ID] = 'Companions',
-    [CONS.M_OTHER_ID] = 'Miscellaneous',
+    [CONS.M_ARMOR_TOKENS_ID] = L['Armor Tokens'],
+    [CONS.M_HOLIDAY_ID] = L['Holiday'],
+    [CONS.M_REAGENTS_ID] = L['Reagents'],
+    [CONS.M_MOUNTS_ID] = L['Mounts'],
+    [CONS.M_COMPANIONS_ID] = L['Companions'],
+    [CONS.M_OTHER_ID] = L['Miscellaneous'],
 
     -- Recipes category
-    [CONS.R_BOOKS_ID] = 'Books',
-    [CONS.R_ALCHEMY_ID] = 'Alchemy',
-    [CONS.R_BLACKSMITHING_ID] = 'Blacksmithing',
-    [CONS.R_COOKING_ID] = 'Cooking',
-    [CONS.R_ENCHANTING_ID] = 'ENchanting',
-    [CONS.R_ENGINEERING_ID] = 'Engineering',
-    [CONS.R_FIRST_AID_ID] = 'First Aid',
-    [CONS.R_FISHING_ID] = 'Fishing',
-    [CONS.R_INSCRIPTIONS_ID] = 'Inscriptions',
-    [CONS.R_JEWELCRAFTING_ID] = 'Jewelcrafting',
-    [CONS.R_LEATHERWORKING_ID] = 'Leatherworking',
-    [CONS.R_MINING_ID] = 'Mining',
-    [CONS.R_TAILORING_ID] = 'Tailoring',
+    [CONS.R_BOOKS_ID] = L['Books'],
+    [CONS.R_ALCHEMY_ID] = L['Alchemy'],
+    [CONS.R_BLACKSMITHING_ID] = L['Blacksmithing'],
+    [CONS.R_COOKING_ID] = L['Cooking'],
+    [CONS.R_ENCHANTING_ID] = L['Enchanting'],
+    [CONS.R_ENGINEERING_ID] = L['Engineering'],
+    [CONS.R_FIRST_AID_ID] = L['First Aid'],
+    [CONS.R_FISHING_ID] = L['Fishing'],
+    [CONS.R_INSCRIPTIONS_ID] = L['Inscriptions'],
+    [CONS.R_JEWELCRAFTING_ID] = L['Jewelcrafting'],
+    [CONS.R_LEATHERWORKING_ID] = L['Leatherworking'],
+    [CONS.R_MINING_ID] = L['Mining'],
+    [CONS.R_TAILORING_ID] = L['Tailoring'],
 
     -- Trade goods category
-    [CONS.T_ARMOR_ENCHANTMENTS_ID] = 'Armor Enchantments',
-    [CONS.T_CLOTH_ID] = 'Cloth',
-    [CONS.T_DEVICES_ID] = 'Devices',
-    [CONS.T_ELEMENTAL_ID] = 'Elemental',
-    [CONS.T_ENCHANTING_ID] = 'Enchanting',
-    [CONS.T_EXPLOSIVES_ID] = 'Explosives',
-    [CONS.T_HERBS_ID] = 'Herbs',
-    [CONS.T_JEWELCRAFTING_ID] = 'Jewelcrafting',
-    [CONS.T_LEATHER_ID] = 'Leather',
-    [CONS.T_MATERIALS_ID] = 'Materials',
-    [CONS.T_MEAT_ID] = 'Cooking',
-    [CONS.T_METAL_STONE_ID] = 'Metal & Stone',
-    [CONS.T_PARTS_ID] = 'Engineering',
-    [CONS.T_WEAPON_ENCHANTMENTS_ID] = 'Weapon Enchantments',
-    [CONS.T_OTHER_ID] = 'Others',
-
-    -- Custom
-    [CONS.CT_ANIMAL_ID] = 'Fish',
-    [CONS.CT_EGG_ID] = 'Egg',
-    [CONS.CT_FISH_ID] = 'Animal',
-
-    [CONS.CT_FISHING_ID] = 'Fishing',
+    [CONS.T_ARMOR_ENCHANTMENTS_ID] = L['Armor Enchantments'],
+    [CONS.T_CLOTH_ID] = L['Cloth'],
+    [CONS.T_DEVICES_ID] = L['Devices'],
+    [CONS.T_ELEMENTAL_ID] = L['Elemental'],
+    [CONS.T_ENCHANTING_ID] = L['Enchanting'],
+    [CONS.T_EXPLOSIVES_ID] = L['Explosives'],
+    [CONS.T_HERBS_ID] = L['Herbs'],
+    [CONS.T_JEWELCRAFTING_ID] = L['Jewelcrafting'],
+    [CONS.T_LEATHER_ID] = L['Leather'],
+    [CONS.T_MATERIALS_ID] = L['Materials'],
+    [CONS.T_MEAT_ID] = L['Cooking'],
+    [CONS.T_METAL_STONE_ID] = L['Metal & Stone'],
+    [CONS.T_PARTS_ID] = L['Engineering'],
+    [CONS.T_WEAPON_ENCHANTMENTS_ID] = L['Weapon Enchantments'],
+    [CONS.T_OTHER_ID] = L['Others'],
 
     -- Professions category
-    [CONS.P_ALCHEMY_ID] = 'Alchemy',
-    [CONS.P_BLACKSMITHING_ID] = 'Blacksmithing',
-    [CONS.P_ENCHANTING_ID] = 'Enchanting',
-    [CONS.P_ENGINEERING_ID] = 'Engineering',
-    [CONS.P_HERBALISM_ID] = 'Herbalism',
-    [CONS.P_INSCRIPTION_ID] = 'Inscription',
-    [CONS.P_JEWELCRAFTING_ID] = 'Jewelcrafting',
-    [CONS.P_LEATHERWORKING_ID] = 'Leatherworking',
-    [CONS.P_MINING_ID] = 'Mining',
-    [CONS.P_SKINNING_ID] = 'Skinning',
-    [CONS.P_TAILORING_ID] = 'Tailoring',
-    [CONS.P_ARCHAEOLOGY_ID] = 'Archaeology',
-    [CONS.P_COOKING_ID] = 'Cooking',
-    [CONS.P_FIRST_AID_ID] = 'First Aid',
-    [CONS.P_FISHING_ID] = 'Fishing',
-    [CONS.P_RIDING_ID] = 'Riding',
+    [CONS.P_ALCHEMY_ID] = L['Alchemy'],
+    [CONS.P_BLACKSMITHING_ID] = L['Blacksmithing'],
+    [CONS.P_ENCHANTING_ID] = L['Enchanting'],
+    [CONS.P_ENGINEERING_ID] = L['Engineering'],
+    [CONS.P_HERBALISM_ID] = L['Herbalism'],
+    [CONS.P_INSCRIPTION_ID] = L['Inscription'],
+    [CONS.P_JEWELCRAFTING_ID] = L['Jewelcrafting'],
+    [CONS.P_LEATHERWORKING_ID] = L['Leatherworking'],
+    [CONS.P_MINING_ID] = L['Mining'],
+    [CONS.P_SKINNING_ID] = L['Skinning'],
+    [CONS.P_TAILORING_ID] = L['Tailoring'],
+    [CONS.P_ARCHAEOLOGY_ID] = L['Archaeology'],
+    [CONS.P_COOKING_ID] = L['Cooking'],
+    [CONS.P_FIRST_AID_ID] = L['First Aid'],
+    [CONS.P_FISHING_ID] = L['Fishing'],
+    [CONS.P_RIDING_ID] = L['Riding'],
+
+    -- Custom
+    [CONS.M_ARCHAEOLOGY_ID] = L['Archaeology'],
+    [CONS.MA_ARTIFACT_ID] = L['Archaeology Artifact'],
+    [CONS.MA_CRATES_ID] = L['Crates'],
+    [CONS.MA_KEY_STONES_ID] = L['Key Stones'],
+    [CONS.MA_QUEST_ID] = L['Archaeology Quest Items'],
+    [CONS.MA_OTHERS_ID] = L['Other Archaeology Items'],
+    
+    [CONS.MH_DARKMOON_ID] = L['Darkmoon Faire'],
+
+    [CONS.M_TELEPORT_ID] = L['Teleport'],
+    [CONS.MT_HEARTSTONE_ID] = L['Heartstones'],
+    [CONS.MT_ARMOR_ID] = L['Armor with Teleport'],
+    [CONS.MT_JEWELRY_ID] = L['Teleport Jewelry'],
+    [CONS.MT_QUEST_ID] = L['Teleport Quests'],
+    [CONS.MT_SCROLLS_ID] = L['Scrolls of Teleport'],
+    [CONS.MT_TOYS_ID] = L['Toys with Teleport'],
+    [CONS.MT_WHISTLE_ID] = L['Whistle with Teleport'],
+
+    [CONS.T_FISHING_ID] = L['Fishing'],
+    [CONS.TF_POLES_ID] = L['Poles'],
+    [CONS.TF_HATS_ID] = L['Fishing Hats'],
+    [CONS.TF_OTHERS_ID] = L['Other Fishing Items'],
+    [CONS.TM_ANIMAL_ID] = L['Animal Meat'],
+    [CONS.TM_EGG_ID] = L['Eggs'],
+    [CONS.TM_FISH_ID] = L['Fish Meat'],
 
     -- All expansions category
-    [CONS.PET_BATTLE_STONE_ID] = 'Battle-Stone',
-    [CONS.PET_CONSUMABLE_ID] = 'Pet Consumable',
-    [CONS.PET_SUPPLIES_ID] = 'Supplies',
-    [CONS.PET_TRAINING_STONE_ID] = 'Training-Stone',
+
+    [CONS.MC_BATTLE_STONE_ID] = L['Battle-Stone'],
+    [CONS.MC_CONSUMABLE_ID] = L['Pet Consumable'],
+    [CONS.MC_SUPPLIES_ID] = L['Pet Supplies'],
+    [CONS.MC_TRAINING_STONE_ID] = L['Training-Stone'],
+
+    -- Legion
+
+    [CONS.ORDER_HALL_ID] = L['Order Hall'],
+    [CONS.O_CHAMPION_ARMOR_ID] = L['Champion Armor'],
+    [CONS.O_CHAMPION_EQUIPMENT_ID] = L['Champion Equipment'],
+    [CONS.O_CHESTS_ID] = L['Champion Chest'],
+    [CONS.O_CONSUMABLES_ID] = L['Order Hall Consumables'],
+    [CONS.O_TROOPS_ID] = L['Troops Items'],
+
+    -- Warlords of Draenor
+    [CONS.GARRISON_ID] = L['Garrison'],
+    [CONS.G_BLUEPRINTS_ID] = L['Blueprints'],
+    [CONS.G_FOLLOWERS_ID] = L['Followers'],
+    [CONS.G_IRONHORDE_ID] = L['Iron Horde'],
+    [CONS.G_MINING_ID] = L['Mining'],
+    [CONS.G_SHIPYARD_ID] = L['Shipyard'],
+    [CONS.G_WORKORDERS_ID] = L['Workorders'],
+
+    [CONS.ASHRAN_ID] = L['Ashran'],
+    [CONS.A_BOOKS_ID] = L['Ashran Books'],
 }
 
 -- Variáveis
@@ -389,38 +512,38 @@ function getAddedArray(array1, array2)
     return retorno
 end
 
---function inicializarDatabase()
-do
+function inicializarDatabase(self)
+--do
     -- Inicializa a variável DatabaseIDs com as chaves necessarias
-    print("Começando a criação do Database")
-    for number_expansion, expansion in ipairs(EXPANSIONS_LIST) do
-        print("Inicialização do database da expansão: " .. Label_Text[expansion])
+    if self.db.profile.flagDebug['DEBUG_INICILIZATION'] then print("Começando a criação do Database") end
+    for number_expansion, expansion in ipairs(RULES.EXPANSIONS_LIST) do
+        if self.db.profile.flagDebug['DEBUG_INICILIZATION'] then print("Inicialização do database da expansão: \'" .. Label_Text[expansion] .. "\'") end
         DatabaseIDs[expansion] = {}
-        local categoriasDaExpansao = getAddedArray(CATEGORY_LIST, EXPANSION_SPECIFIC_SUBCATEGORY[expansion])
+        local categoriasDaExpansao = getAddedArray(RULES.CATEGORY_LIST, RULES.EXPANSION_SPECIFIC_SUBCATEGORY[expansion])
         for number_category, category in ipairs(categoriasDaExpansao) do
             DatabaseIDs[expansion][category] = {}
-            print("Criado: " .. Label_Text[category] .. " em " .. Label_Text[expansion])
-            if CATEGORY_HAS_SUBCATEGORY[category] then
-                for number_subcategory, subcategory in ipairs(CATEGORY_HAS_SUBCATEGORY[category]) do
+            if self.db.profile.flagDebug['DEBUG_INICILIZATION'] then print("Criado: \'" .. Label_Text[category] .. "\' em \'" .. Label_Text[expansion] .. "\'") end
+            if RULES.CATEGORY_HAS_SUBCATEGORY[category] then
+                for number_subcategory, subcategory in ipairs(RULES.CATEGORY_HAS_SUBCATEGORY[category]) do
                     DatabaseIDs[expansion][category][subcategory] = {}
-                    print("Criado: " .. Label_Text[subcategory] .. " em " .. Label_Text[category] .. " em " .. Label_Text[expansion])
+                    if self.db.profile.flagDebug['DEBUG_INICILIZATION'] then print("Criado: \'" .. Label_Text[subcategory] .. "\' em \'" .. Label_Text[category] .. "\' em \'" .. Label_Text[expansion] .. "\'") end
                 end
             end
         end
     end
 
-    for number_expansion_idependent, expansion_idependent in ipairs(EXPANSION_IDEPENDENDT_CATEGORY_LIST) do
+    for number_expansion_idependent, expansion_idependent in ipairs(RULES.EXPANSION_IDEPENDENDT_CATEGORY_LIST) do
         DatabaseIDs[expansion_idependent] = {}
-        if CATEGORY_HAS_SUBCATEGORY[expansion_idependent] then
-            for number_subcategory, category in ipairs(CATEGORY_HAS_SUBCATEGORY[expansion_idependent]) do
+        if RULES.CATEGORY_HAS_SUBCATEGORY[expansion_idependent] then
+            for number_subcategory, category in ipairs(RULES.CATEGORY_HAS_SUBCATEGORY[expansion_idependent]) do
                 DatabaseIDs[expansion_idependent][category] = {}
             end
         end
     end
 end
 
-do
---function inicializarDatabaseID()
+--do
+function inicializarDatabaseID(self)
     DatabaseIDs[CONS.LEGION_ID][CONS.CONTAINERS_ID] = {
         138293, -- Explorer's Pack
         123958, -- Demon Hide Satchel
@@ -467,14 +590,10 @@ do
         150950, -- Old Stratholme Key
         132514, -- Auto-Hammer
         132515, -- Failure Detection Pylon
-        132523, -- Reaves Battery
         142456, -- Oakthrush Staff
         137401, -- Illusion Bomb
         141411, -- Translocation Anomaly Neutralization Crystal
         140534, -- Soulcutter Mageblade
-        144341, -- Rechargeable Reaves Battery
-        151652, -- Wormhole Generator: Argus
-        132517, -- Intra-Dalaran Wormhole Generator
         132518, -- Blingtron's Circuit Design Tutorial
         132524, -- Reaves Module: Wormhole Generator Mode
         132525, -- Reaves Module: Repair Mode
@@ -486,7 +605,6 @@ do
         130102, -- Mother's Skinning Knife
         132508, -- Kvaldir Bear Trap
         156630, -- Relinquished Armor Set
-        140293, -- Exploding Cask
         151797, -- Death Screamers
         151820, -- Primal Ascendant's Stormcallers
         138489} -- Kargath's Sacrificed Hands
@@ -723,15 +841,6 @@ do
         146846, -- Arne's Green Winter Clothes BoA -> BoE
         151133, -- Nomi Snacks
         128851, -- Roasted Juicycrunch Carrots
-        140253, -- Swiftpad Brew
-        140256, -- Skysinger Brew
-        140287, -- Stoutheart Brew
-        140288, -- Bubblebelly Brew
-        140289, -- Lungfiller Brew
-        140290, -- Seastrider Brew
-        140291, -- Featherfoot Brew
-        140292, -- Tumblerun Brew
-        140295, -- Badgercharm Brew
         138478, -- Feast of Ribs
         138479} -- Potato Stew Feast
     DatabaseIDs[CONS.LEGION_ID][CONS.CONSUMABLES_ID][CONS.C_ITEM_ENHANCEMENTS_ID] = {
@@ -861,7 +970,6 @@ do
         138963, -- Tiny Little Grabbing Apparatus
         139175, -- Arcane Lure
         139500, -- Hippogryph Feather
-        139593, -- Sack of Salvaged Goods
         141333, -- Codex of the Tranquil Mind
         141641, -- Codex of the Clear Mind
         133888, -- Shortstalk Mushroom
@@ -1264,11 +1372,6 @@ do
         140949, -- Onyx Or'ligai Egg
         141011, -- Recipe: Surf
         141012, -- Recipe: Turf
-        141013, -- Scroll of Town Portal: Shala'nir
-        141014, -- Scroll of Town Portal: Sashj'tar
-        141015, -- Scroll of Town Portal: Kal'delar
-        141016, -- Scroll of Town Portal: Faronaar
-        141017, -- Scroll of Town Portal: Lian'tril
         141702, -- Spoiled Manawine Dregs
         141703, -- Witch-Harpy Talon
         141704, -- Forgotten Offering
@@ -1364,14 +1467,6 @@ do
         136857, -- Songs of the Legion
         138480, -- Black Harvest Tome
         138487, -- Shinfel's Staff of Torment
-        139447, -- Vial of Pure Light
-        139448, -- Vial of Dark Shadows
-        139449, -- Essence of the Naaru
-        139450, -- Void Sphere
-        139451, -- Swirling Void Potion
-        139452, -- Essence of the Light
-        139459, -- Blessing of the Light
-        139461, -- Rune of Darkness
         139594, -- Salvage Crate
         140357, -- Fel Lava Rock
         140358, -- Eredar Armor Clasp
@@ -1457,7 +1552,6 @@ do
         140532, -- Inscribed Vrykul Runestone
         140567, -- Songs of the Horde
         140568, -- Songs of the Alliance
-        140590, -- Large Crate of Salvage
         141295, -- Extra Thick Mojo
         142023, -- Adventurer's Footlocker
         142406, -- Drums of the Mountain
@@ -1476,36 +1570,16 @@ do
         129211, -- Steamy Romance Novel Kit
         129758, -- Reinforced Kodo Hide
         134125, -- Mecha-Bond Imprint Matrix
-        136412, -- Heavy Armor Set
         137010, -- Half-Full Bottle of Arcwine
         137209, -- Armor Enhancement Token
         137467, -- Shimmerfield Crystal
         139592, -- Smoky Boots
-        139792, -- Fruitful Bauble
-        139795, -- Draught of Courage
-        139813, -- Swift Boots
-        139816, -- Well-Worn Stone
-        139831, -- Smoke Grenades
-        139835, -- Marauder's Vestige
-        139839, -- Voodoo Post
-        139843, -- Conjurer's Bauble
-        139847, -- Bow of Ancient Kings
-        139851, -- Valarjar's Might
-        139855, -- Skull of Embrace
-        139859, -- Chi Empowered Jewel
-        139863, -- Elune's Sight
-        139867, -- Justice Hammer
-        139871, -- Holy Figurine
-        139875, -- Undead Token
-        140572, -- Hasty Pocketwatch
-        140581, -- Sturdy Hiking Boots
         140742, -- Delightfully Wrapped Armaments
         142263, -- Machine Fluid
         142264, -- Drudge Fluid
         142359, -- Lava Oil
         143931, -- Small Boat
         146715, -- Overcharged Portalstone
-        147348, -- Bulky Armor Set
         147351, -- Fel Armor Enhancement Token
         147573, -- Trial of Style Reward: First Place
         147574, -- Trial of Style Reward: Second Place
@@ -1513,14 +1587,6 @@ do
         147576, -- Trial of Style Consolation Prize
         151134, -- Trial of Style Token
         151653, -- Broken Isles Recipe Scrap
-        151842, -- Krokul Armor Set
-        152437, -- Viscid Demon Blood
-        152438, -- Krokul Sledgehammer
-        152439, -- Pit Lord Tusk
-        152927, -- Serrated Stone Axe
-        152928, -- Archaic Seerstone
-        152929, -- Pronged Ridgestalker Spear
-        152930, -- Vilefiend-Spine Whip
         152733, -- Unsullied Trinket
         152734, -- Unsullied Cloth Mantle
         152735, -- Unsullied Ring
@@ -1716,16 +1782,6 @@ do
         141947, -- Mark of Lunastre
         141948, -- Token of a Master Cultivator
         141949, -- Everburning Arcane Glowlamp
-        141958, -- Soul Flame of Fortification
-        141959, -- Soul Flame of Alacrity
-        141960, -- Soul Flame of Insight
-        141961, -- Soul Flame of Rejuvenation
-        141962, -- Soul Flame of Castigation
-        141964, -- Flaming Demonheart
-        141965, -- Shadowy Demonheart
-        141966, -- Coercive Demonheart
-        141967, -- Whispering Demonheart
-        141968, -- Immense Demonheart
         141987, -- Greater Valarjar Insignia
         141988, -- Greater Dreamweaver Insignia
         141989, -- Greater Court of Farondis Insignia
@@ -2119,7 +2175,6 @@ do
         134062, -- Mog'dorg the Wizened
         134064, -- The Great Akazamzarak
         136269, -- Kel'danath's Manaflask
-        137207, -- Fortified Armor Set
         137675, -- Transmog Set Test
         138413, -- Boots of Efficiency
         138787, -- Tome of Illusions: Azeroth
@@ -2154,22 +2209,6 @@ do
         138838, -- Illusion: Deathfrost
         138954, -- Illusion: Poisoned
         138955, -- Illusion: Rune of Razorice
-        139801, -- Lucky Doodad
-        139808, -- Curio of Abundant Happiness
-        139811, -- Necklace of Endless Memories
-        139814, -- Carrot on a Stick
-        139833, -- Leech Brew
-        139837, -- Demon's Sigil
-        139841, -- Totem of the Earth
-        139845, -- Band of Primordial Strength
-        139849, -- Windrunner's Gift
-        139853, -- Axe of the Valkyra
-        139857, -- Helm of Command
-        139861, -- Mogu Madstone
-        139865, -- Glowing Token
-        139869, -- Libram of Enlightenment
-        139873, -- Bottled Sanity
-        139877, -- Death's Touch
         139888, -- Frost Crux
         139892, -- Demonic Phylactery
         140038, -- Focusing Crystal
@@ -2178,8 +2217,6 @@ do
         140158, -- Empowered Rift Core
         140260, -- Arcane Remnant of Falanaar
         140336, -- Brulfist Idol
-        140571, -- Potion of Energy
-        140582, -- Bottomless Flask
         141870, -- Arcane Tablet of Falanaar
         142288, -- Rumble Card: Grief Warden
         142289, -- Rumble Card: Penguin Stampede
@@ -2200,7 +2237,6 @@ do
         142530, -- Crate of Bobbers: Tugboat
         142531, -- Crate of Bobbers: Squeaky Duck
         142532, -- Crate of Bobbers: Murloc Head
-        142543, -- Scroll of Town Portal
         143662, -- Crate of Bobbers: Wooden Pepe
         143727, -- Champion's Salute
         143758, -- Free Drinks Voucher
@@ -2216,7 +2252,6 @@ do
         147310, -- Floating Totem
         147311, -- Replica Gondola
         147312, -- Demon Noggin
-        147349, -- Spiked Armor Set
         147416, -- Arcane Tablet of Falanaar
         147418, -- Arcane Remnant of Falanaar
         151117, -- Ensemble: Mana-Etched Regalia
@@ -2224,17 +2259,8 @@ do
         151119, -- Ensemble: Der'izu Armor
         151120, -- Ensemble: Righteous Battleplate
         151492, -- Bronze Drake
-        151843, -- Mac'Aree Armor Set
-        152440, -- Void-Touched Arinor Blossom
-        152441, -- Satchel of Lucidity
-        152442, -- Impervious Shadoweave Hood
         152556, -- Trawler Totem
         152574, -- Corbyn's Beacon
-        152933, -- Shadowguard Void Effusion
-        152934, -- Shadow-Soaked Stalker Heart
-        152935, -- Wakener's Bauble
-        152936, -- Azurelight Sapphire
-        153005, -- Relinquished Armor Set
         153059, -- Relinquished Arcane Relic
         153060, -- Relinquished Blood Relic
         153061, -- Relinquished Fel Relic
@@ -2957,75 +2983,12 @@ do
         146650, -- Arsenal: Merciless Gladiator's Weapons
         146651, -- Arsenal: Gladiator's Weapons
         131732, -- Purple Hills of Mac'Aree
-        137208, -- Indestructible Armor Set
-        137387, -- Immaculate Dragonkin Battle-Stone
-        137388, -- Immaculate Humanoid Battle-Stone
-        137389, -- Immaculate Undead Battle-Stone
-        137390, -- Immaculate Mechanical Battle-Stone
-        137391, -- Immaculate Aquatic Battle-Stone
-        137392, -- Immaculate Magic Battle-Stone
-        137393, -- Immaculate Critter Battle-Stone
-        137394, -- Immaculate Beast Battle-Stone
-        137395, -- Immaculate Elemental Battle-Stone
-        137396, -- Immaculate Flying Battle-Stone
-        137627, -- Immaculate Battle-Stone
-        139799, -- Pathfinder's Saddle
-        139802, -- Auspicious Fetish
-        139809, -- Elixir of Plenty
-        139812, -- Potion of Triton
-        139832, -- Sleep Potion
-        139834, -- Vanishing Dust
-        139836, -- Shadow Relic
-        139838, -- Essence of Malice
-        139840, -- Earthly Pincer
-        139842, -- Furious Charge
-        139844, -- Arcanist's Trifle
-        139846, -- Highborne Bauble
-        139848, -- Seeker's Scrip
-        139850, -- Cloak of Deception
-        139852, -- War Banner
-        139854, -- Skull of a Fallen Foe
-        139856, -- Demonic Brew
-        139858, -- Black Harvest Curio
-        139860, -- Tea of Blessing
-        139862, -- Bell of Fury
-        139864, -- Scroll of Growth
-        139866, -- Forest Ember
-        139868, -- Light's Shield
-        139870, -- Silver Hand Ornament
-        139872, -- Light's Command
-        139874, -- Sanity Edge
-        139876, -- Rune of Reckoning
-        139878, -- Relic of the Ebon Blade
-        140573, -- Elixir of Overwhelming Focus
-        140583, -- Vial of Timeless Breath
         141860, -- Ingram's Puzzle
-        147350, -- Invincible Armor Set
-        147560, -- Horn of Rage
-        147561, -- Relic of Demonic Influence
-        147563, -- Stone Totem
-        147564, -- Diamond Stone
-        147565, -- Book of Lost Sermons
-        147566, -- Horn of Valor
-        147567, -- Soothing Focus
-        147568, -- Essence of Nether
-        147569, -- Arcane Trap
-        147570, -- Dreamgrove Leaf
-        147571, -- Demonic Standard
-        147572, -- Sigil of Ebon Frost
         151550, -- Time-Lost Keepsake Box
         151551, -- Time-Lost Keepsake Box
         151552, -- Time-Lost Keepsake Box
         151553, -- Time-Lost Keepsake Box
         151554, -- Time-Lost Keepsake Box
-        151844, -- Xenedar Armor Set
-        152443, -- Sanctified Armaments of the Light
-        152444, -- Exalted Xenedar Hammer
-        152445, -- Memento of the Lightforged
-        152446, -- Writ of Holy Orders
-        152447, -- Lightburst Charge
-        152931, -- Xenic Tincture
-        152932, -- Runewarded Lightblade
         147294, -- Bone-Wrought Coffer of the Damned
         147295, -- Demonslayer's Soul-Sealed Satchel
         147296, -- Living Root-Bound Cache
@@ -3040,33 +3003,6 @@ do
         147305, -- Stalwart Champion's War Chest
         150372, -- Arsenal: The Warglaives of Azzinoth
         138416, -- Xavier's Curiosity
-        139804, -- Glacial Fang
-        139819, -- Embers of the Firelands
-        139821, -- Omen's Bidding
-        139822, -- Dust of Azeroth
-        139823, -- Nightmare's End
-        139824, -- Light's Haven
-        139825, -- Tome of Secrets
-        139826, -- Eltrig's Grace
-        139827, -- Brooch of Endless Dreams
-        139828, -- Queen's Feathers
-        139829, -- Potion of Sacrifice
-        139830, -- Demon in a Box
-        147552, -- Embers of the Firelands
-        147553, -- Shard of Twisting Nether
-        147554, -- Harpy Feather
-        147555, -- Vial of Sight
-        147556, -- Cloak of Concealment
-        147557, -- Fel Imp Tooth
-        147558, -- Pouch of Wonder
-        147559, -- Ward of Infinite Fury
-        152448, -- Praetorium Tome of Arcana
-        152449, -- Azurelight Candelabra
-        152450, -- Augari Censorite Staff
-        152451, -- Volatile Stygian Scroll
-        152452, -- Pulsing Wrathguard Skull
-        152453, -- Fel-Infused Legion Effigy
-        152454, -- Darklost Claw
         139536, -- Emanation of the Winds
         139546, -- Twisting Anima of Souls
         139547, -- Runes of the Darkening
@@ -3125,6 +3061,8 @@ do
         151615, -- Weathered Heirloom Scabbard
         151379, -- Arne Test Heirloom - Timeworn Heirloom Scabbard
         151378} -- Arne Test Heirloom - Ancient Heirloom Scabbard
+    DatabaseIDs[CONS.LEGION_ID][CONS.CURRENCY_ID] = {
+        137642} -- Mark of Honor
     DatabaseIDs[CONS.LEGION_ID][CONS.GEMS_ID] = {
         130215, -- Deadly Deep Amber
         130216, -- Quick Azsunite
@@ -4449,6 +4387,7 @@ do
         138990, -- Exquisite Costume Set: "Grommash"
         151268} -- Exquisite Costume Set: "Xavius"
     DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_REAGENTS_ID] = {
+        136342,
         137622, -- Imp in a Jar
         137623, -- Amulet of Command
         137626, -- Felsurge Web Gland
@@ -4457,7 +4396,7 @@ do
         142356, -- Wispbreath Poultice
         147775, -- Nether Portal Disruptor
         138875, -- Small Ley Crystal
-        138019} -- Mythic Keystone
+        138019,} -- Mythic Keystone
     DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_MOUNTS_ID] = {
         153193, -- Baarut the Brisk
         140228, -- Prestigious Bronze Courser
@@ -4730,6 +4669,70 @@ do
         147540, -- Frostbrood Whelpling
         147541, -- Vilebrood Whelpling
         147542} -- Ban-Fu, Cub of Ban-Lu
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID][CONS.MC_BATTLE_STONE_ID] = {
+        137387, -- Immaculate Dragonkin Battle-Stone
+        137388, -- Immaculate Humanoid Battle-Stone
+        137389, -- Immaculate Undead Battle-Stone
+        137390, -- Immaculate Mechanical Battle-Stone
+        137391, -- Immaculate Aquatic Battle-Stone
+        137392, -- Immaculate Magic Battle-Stone
+        137393, -- Immaculate Critter Battle-Stone
+        137394, -- Immaculate Beast Battle-Stone
+        137395, -- Immaculate Elemental Battle-Stone
+        137396, -- Immaculate Flying Battle-Stone
+        137627} -- Immaculate Battle-Stone
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID][CONS.MC_SUPPLIES_ID] = {
+        144345} -- Pile of Pet Goodies
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_HEARTSTONE_ID] = {
+        140192, -- Dalaran Hearthstone
+        132517, -- Intra-Dalaran Wormhole Generator
+        140493, -- Adept's Guide to Dimensional Rifting
+        132523, -- Reaves Battery
+        144341, -- Rechargeable Reaves Battery
+        138448} -- Emblem of Margoss
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_JEWELRY_ID] = {
+        139599, -- Empowered Ring of the Kirin Tor
+        141324, -- Talisman of the Shal'dorei
+        142469, -- Violet Seal of the Grand Magus
+        144391} -- Pugilist's Powerful Punching Ring
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_SCROLLS_ID] = {
+        139590, -- Scroll of Teleport: Ravenholdt
+        141015, -- Scroll of Town Portal: Kal'delar
+        141014, -- Scroll of Town Portal: Sashj'tar
+        141017, -- Scroll of Town Portal: Lian'tril
+        141016, -- Scroll of Town Portal: Faronaar
+        141013, -- Scroll of Town Portal: Shala'nir
+        142543} -- Scroll of Town Portal (Diablo 3 event)
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_TOYS_ID] = {
+        151652, -- Wormhole Generator: Argus
+        142542} -- Tome of Town Portal (Diablo 3 event)
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_WHISTLE_ID] = {
+        141605} -- Flight Master's Whistle
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_CRATES_ID] = {
+        142113, -- Crate of Arakkoa Archaeology Fragments
+        142114, -- Crate of Draenor Clans Archaeology Fragments
+        142115} -- Crate of Ogre Archaeology Fragments
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_KEY_STONES_ID] = {
+        130905, -- Mark of the Deceiver
+        130903, -- Ancient Suramar Scroll
+        130904} -- Highmountain Ritual-Stone
+    DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_QUEST_ID] = {
+        136362, -- Ancient War Remnants
+        130921, -- Pristine Violetglass Vessel
+        130922, -- Pristine Inert Leystone Charm
+        130923, -- Pristine Quietwine Vial
+        130924, -- Pristine Pre-War Highborne Tapestry
+        130925, -- Pristine Nobleman's Letter Opener
+        130926, -- Pristine Trailhead Drum
+        130927, -- Pristine Moosebone Fish-Hook
+        130928, -- Pristine Hand-Smoothed Pyrestone
+        130929, -- Pristine Drogbar Gem-Roller
+        130930, -- Pristine Stonewood Bow
+        130931, -- Pristine Imp's Cup
+        130932, -- Pristine Flayed-Skin Chronicle
+        130933, -- Pristine Malformed Abyssal
+        130934, -- Pristine Orb of Inner Chaos
+        130935} -- Pristine Houndstooth Hauberk
     DatabaseIDs[CONS.LEGION_ID][CONS.MISCELLANEOUS_ID][CONS.M_OTHER_ID] = {
         137617, -- Researcher's Notes
         137604, -- Unstable Riftstone
@@ -4786,7 +4789,6 @@ do
         139389, -- Charred Locket
         139783, -- Weathered Relic
         140212, -- Ketchum Tablet
-        140216, -- Eagle Feather
         141005, -- Vial of Hippogryph Pheromones
         141022, -- Legion Ammunition
         141410, -- Invasion Survival Kit
@@ -4853,22 +4855,12 @@ do
         138133, -- Elixir of Endless Wonder
         138135, -- Rax's Magnifying Glass
         138410, -- Summoning Portal
-        138412, -- Iresoul's Healthstone
-        138883, -- Meryl's Conjured Refreshment
-        139177, -- Shattered Soul
-        139376, -- Healing Well
-        139418, -- Healing Stream Totem
-        139419, -- Golden Banana
-        139420, -- Wild Mushroom
-        139428, -- A Master Plan
         139584, -- Sticky Bombs
         139585, -- Smoke Powder
         139586, -- Thistle Tea
         139588, -- Pack of Battle Potions
         139589, -- Poisoned Throwing Knives
         139632, -- A Tiny Pair of Goggles
-        139670, -- Scream of the Dead
-        140156, -- Blessing of the Order
         140220, -- Scavenged Cloth
         140221, -- Found Sack of Gems
         140222, -- Harvested Goods
@@ -4876,10 +4868,7 @@ do
         140225, -- Salvaged Armor
         140226, -- Mana-Tinged Pack
         140227, -- Bloodhunter's Quarry
-        140749, -- Horn of Winter
-        140760, -- Libram of Truth
         140767, -- Pile of Bits and Bones
-        140922, -- Imp Pact
         140923, -- Ghoul Tombstone
         140924, -- Ashtongue Beacon
         140925, -- Enchanted Bark
@@ -4892,15 +4881,8 @@ do
         140932, -- Earthen Mark
         140933, -- Runed Aspirant's Band
         141071, -- Badge of Honor
-        142209, -- Dinner Invitation
-        143605, -- Strange Ball of Energy
-        143849, -- Summon Royal Guard
-        143850, -- Summon Grimtotem Warrior
-        143852, -- Lucky Rabbit's Foot
         144330, -- Sprocket Container
-        144345, -- Pile of Pet Goodies
         144457, -- Scrolls of the Faldrottin
-        150581, -- Chest of Useful Equipment
         151152, -- Star-Etched Ring
         151153, -- Glinting Manaseal
         151154, -- Managleam Pendant
@@ -4948,7 +4930,6 @@ do
         137563, -- Farondis Lockbox
         137564, -- Nightfallen Hoard
         137565, -- Warden's Field Kit
-        137642, -- Mark of Honor
         138202, -- Sparklepony XL
         138490, -- Waterspeaker's Totem
         138873, -- Mystical Frosh Hat
@@ -4956,13 +4937,11 @@ do
         138900, -- Gravil Goldbraid's Famous Sausage Hat
         140324, -- Mobile Telemancy Beacon
         140325, -- Home Made Party Mask
-        140493, -- Adept's Guide to Dimensional Rifting
         140591, -- Shattered Satchel of Cooperation
         140632, -- Lava Fountain
         140779, -- Falanaar Echo
         140780, -- Fal'dorei Egg
         140786, -- Ley Spider Eggs
-        141028, -- Grimoire of Knowledge
         141155, -- Challenger's Spoils
         141156, -- Haunted Ravencrest Keepsake
         141157, -- Nightborne Rucksack
@@ -5060,7 +5039,6 @@ do
         152923, -- Gleaming Footlocker
         152982, -- Vixx's Chest of Tricks
         153004, -- Unstable Portal Emitter
-        153006, -- Grimoire of Lost Knowledge
         153124, -- Spire of Spite
         153126, -- Micro-Artillery Controller
         153179, -- Blue Conservatory Scroll
@@ -5124,20 +5102,16 @@ do
         132118, -- Aggramar's Blessing
         134831, -- "Guy Incognito" Costume
         136360, -- Crystalline Demonic Eye
-        136362, -- Ancient War Remnants
         136383, -- Ravencrest Cache
         137663, -- Soft Foam Sword
         138415, -- Slightly-Chewed Insult Book
-        138448, -- Emblem of Margoss
         139337, -- Disposable Winter Veil Suits
         139467, -- Satchel of Spoils
         139587, -- Suspicious Crate
-        139590, -- Scroll of Teleport: Ravenholdt
         139591, -- Stolen Tome of Artifact Lore
         139781, -- Marin Noggenfogger's Lucky Coin
         140160, -- Stormforged Vrykul Horn
         140314, -- Crab Shank
-        141605, -- Flight Master's Whistle
         141649, -- Set of Matches
         142250, -- Aegwynn and the Dragon Hunt
         142341, -- Love Boat
@@ -5145,7 +5119,6 @@ do
         142495, -- Fake Teeth
         142496, -- Dirty Spoon
         142497, -- Tiny Pack
-        142542, -- Tome of Town Portal
         142545, -- Small Charm of Life
         142546, -- Small Charm of Inertia
         142547, -- Large Charm of Strength
@@ -5219,9 +5192,6 @@ do
         151349, -- Toy Weapon Set
         151830, -- Light's Judgment
         151912, -- Shroud of Arcane Echoes
-        152095, -- Krokul Ridgestalker
-        152096, -- Void-Purged Krokul
-        152097, -- Lightforged Bulwark
         152098, -- Lightforged Warframe
         152469, -- Matrix Uplink
         149433, -- Helm of the Demonic Gladiator
@@ -5359,8 +5329,258 @@ do
         127009, -- Fragment of Frostmourne
         139771, -- Seething Essence
         140199, -- Nightshard
-        140200} -- Immaculate Nightshard Curio
+        140200, -- Immaculate Nightshard Curio
+        -- JUNK
+        135546, --Fel-Touched Crate of Battlefield Goods
+        138098, -- Iron-Bound Crate of Battlefield Goods
+        139049, -- Large Legion Chest
+        141069, -- Skyhold Chest of Riches
+        135545, -- Savage Crate of Battlefield Goods
+        139048, -- Small Legion Chest
+        135543, -- Rival's Crate of Battlefield Goods
+        135544, -- Tranquil Crate of Helpful Goods - Reuse Me
+        135542, -- Icy Crate of Battlefield Goods
+        139403, -- Powerful Magical Foci and Those Who Wielded Them
+        140093, -- The Untold Tales of the War of the Ancients
+        140097, -- The Fall of Lordaeron and the Scouring of the Eastweald
+        140101, -- A Hypothetical Examination of the Legion's Weaknesses
+        140105, -- The Untold Tales of the War of the Ancients
+        140109, -- How to Meditate in a Hurricane
+        140113, -- Legends of the Silver Hand
+        140117, -- The Hunt for Light's Wrath
+        140121, -- The Seven Curses of the Southern Seas
+        140125, -- The Fall of the Warchief
+        140129, -- A Hypothetical Examination of the Legion's Weaknesses
+        140133, -- Axe, Blade, and Fist
+        141332, -- The Annals of Light and Shadow
+        154879, -- Awoken Titan Essence
+        141862, -- Mote of Light
+        141904, -- Battleground Victory Bonus
+        141905, -- Battleground Victory Bonus
+        141906, -- Arena Victory Bonus
+        143562, -- Chest of the Foreseen Conqueror
+        143563, -- Gauntlets of the Foreseen Conqueror
+        143564, -- Leggings of the Foreseen Conqueror
+        143565, -- Helm of the Foreseen Conqueror
+        143566, -- Shoulders of the Foreseen Conqueror
+        143567, -- Gauntlets of the Foreseen Vanquisher
+        143568, -- Helm of the Foreseen Vanquisher
+        143569, -- Leggings of the Foreseen Vanquisher
+        143570, -- Shoulders of the Foreseen Vanquisher
+        143571, -- Chest of the Foreseen Vanquisher
+        143572, -- Chest of the Foreseen Protector
+        143573, -- Gauntlets of the Foreseen Protector
+        143574, -- Leggings of the Foreseen Protector
+        143575, -- Helm of the Foreseen Protector
+        143576, -- Shoulders of the Foreseen Protector
+        143577, -- Cloak of the Foreseen Conqueror
+        143578, -- Cloak of the Foreseen Vanquisher
+        143579, -- Cloak of the Foreseen Protector
+        147316, -- Chest of the Foregone Vanquisher
+        147317, -- Chest of the Foregone Conqueror
+        147318, -- Chest of the Foregone Protector
+        147319, -- Gauntlets of the Foregone Vanquisher
+        147320, -- Gauntlets of the Foregone Conqueror
+        147321, -- Gauntlets of the Foregone Protector
+        147322, -- Helm of the Foregone Vanquisher
+        147323, -- Helm of the Foregone Conqueror
+        147324, -- Helm of the Foregone Protector
+        147325, -- Leggings of the Foregone Vanquisher
+        147326, -- Leggings of the Foregone Conqueror
+        147327, -- Leggings of the Foregone Protector
+        147328, -- Shoulders of the Foregone Vanquisher
+        147329, -- Shoulders of the Foregone Conqueror
+        147330, -- Shoulders of the Foregone Protector
+        147331, -- Cloak of the Foregone Vanquisher
+        147332, -- Cloak of the Foregone Conqueror
+        147333, -- Cloak of the Foregone Protector
+        152065, -- Copy Chest of the Foregone Vanquisher
+        152066, -- Copy Chest of the Foregone Conqueror
+        152067, -- Copy Chest of the Foregone Protector
+        152068, -- Copy Gauntlets of the Foregone Vanquisher
+        152069, -- Copy Gauntlets of the Foregone Conqueror
+        152070, -- Copy Gauntlets of the Foregone Protector
+        152071, -- Copy Helm of the Foregone Vanquisher
+        152072, -- Copy Helm of the Foregone Conqueror
+        152073, -- Copy Helm of the Foregone Protector
+        152074, -- Copy Leggings of the Foregone Vanquisher
+        152075, -- Copy Leggings of the Foregone Conqueror
+        152076, -- Copy Leggings of the Foregone Protector
+        152077, -- Copy Shoulders of the Foregone Vanquisher
+        152078, -- Copy Shoulders of the Foregone Conqueror
+        152079, -- Copy Shoulders of the Foregone Protector
+        152080, -- Copy Cloak of the Foregone Vanquisher
+        152081, -- Copy Cloak of the Foregone Conqueror
+        152082, -- Copy Cloak of the Foregone Protector
+        152515, -- Cloak of the Antoran Protector
+        152516, -- Cloak of the Antoran Conqueror
+        152517, -- Cloak of the Antoran Vanquisher
+        152518, -- Chest of the Antoran Vanquisher
+        152519, -- Chest of the Antoran Conqueror
+        152520, -- Chest of the Antoran Protector
+        152521, -- Gauntlets of the Antoran Vanquisher
+        152522, -- Gauntlets of the Antoran Conqueror
+        152523, -- Gauntlets of the Antoran Protector
+        152524, -- Helm of the Antoran Vanquisher
+        152525, -- Helm of the Antoran Conqueror
+        152526, -- Helm of the Antoran Protector
+        152527, -- Leggings of the Antoran Vanquisher
+        152528, -- Leggings of the Antoran Conqueror
+        152529, -- Leggings of the Antoran Protector
+        152530, -- Shoulders of the Antoran Vanquisher
+        152531, -- Shoulders of the Antoran Conqueror
+        152532, -- Shoulders of the Antoran Protector
+        130147, -- Thistleleaf Branch
+        130194, -- Silver Gilnean Brooch
+        130199, -- Legion Pocket Portal
+        141899, -- Battleground Victory Award
+        141901, -- Battleground Victory Award
+        141902, -- Arena Victory Award
+        141903, -- Arena Victory Award
+        147838, -- Akazamzarak's Spare Hat
+        147871, -- Doom Stone
+        153001, -- Faintly Glowing Phoenix Down
+        153039, -- Crystalline Campfire
+        153116, -- Wyrmtongue Cache of Herbs
+        153117, -- Wyrmtongue Cache of Supplies
+        153118, -- Wyrmtongue Cache of Shiny Things
+        153119, -- Wyrmtongue Cache of Finery
+        153120, -- Wyrmtongue Cache of Minerals
+        153121, -- Wyrmtongue Cache of Skins
+        153122, -- Wyrmtongue Cache of Magic
+        121331, -- Leystone Lockbox
+        147870, -- Strange Dimensional Shard
+        151526, -- Depleted Riftstone
+        151702, -- Charged Riftstone
+        135541, -- Crusader's Crate of Battlefield Goods
+        129158, -- Starlight Rosedust
+        140658, -- Skull of Nithogg
+        140659, -- Skull of Shar'thos
+        140660, -- Haft of the God-King
+        138470, -- Silver Strongbox
+        138475, -- Silver Strongbox
+        141409, -- Candrael's Charm
+        132892, -- Blingtron 6000 Gift Package
+        138469, -- Champion's Strongbox
+        138471, -- Bronze Strongbox
+        138472, -- Steel Strongbox
+        138473, -- Steel Strongbox
+        138474, -- Champion's Strongbox
+        138476, -- Bronze Strongbox
+        140179, -- Faded Star Chart
+        140356, -- Demonic Scribblings
+        140360, -- Rockwurm Barb
+        140362, -- Dust from the Shadowlands
+        140375, -- Used Felblades
+        140376, -- Mardum-Calibrated Balancer
+        140458, -- Lasher Seed
+        140464, -- Miniature Totem
+        140465, -- Duskpelt Hide
+        140483, -- Jade Fragment
+        140499, -- Off-Colored Fel Stone
+        140501, -- Outdated Intelligence
+        140502, -- Tattered Eye Patch
+        140514, -- Vial of Air
+        140515, -- Gift of Al'Akir
+        140526, -- Eredar Signet
+        140527, -- Wrathguard's Medallion
+        149574, -- Loot-Stuffed Pumpkin
+        149752, -- Keg-Shaped Treasure Box
+        149753, -- Knapsack of Chilled Goods
+        151557, -- Champion's Strongbox
+        151558, -- Champion's Strongbox
+        149503, -- Stolen Gift
+        147907, -- Heart-Shaped Carton
+        135540, -- Crate of Battlefield Goods
+        135539, -- Crate of Battlefield Goods
+        150743, -- Surviving Kalimdor
+        150744, -- Walking Kalimdor with the Earthmother
+        150745, -- The Azeroth Campaign
+        150746, -- To Modernize the Provisioning of Azeroth
+        131743, -- Blood of Young Mannoroth
+        139624, -- Shard of Darkness
+        141995, -- Unclaimed Black Market Container
+        132107, -- Hidden Horde Cache Map
+        132122, -- Legion Commander's Key
+        133901, -- Faded Treasure Map
+        133902, -- Worn Treasure Map
+        133903, -- Old Treasure Map
+        133904, -- Stained Treasure Map
+        133905, -- Bloody Treasure Map
+        133906, -- Ripped Treasure Map
+        133907, -- Torn Treasure Map
+        133908, -- Smudged Treasure Map
+        133909, -- Folded Treasure Map
+        143559, -- Wyrmtongue's Cache Key
+        122291, -- Sanctuary Coins
+        130186, -- Intern Items - BJI
+        141593, -- Dro's Key
+        146662, -- Potion of Potion Drinking
+        146663, -- Soggy Tapestry
+        146664, -- Finely-Jeweled Key
+        146671, -- Cubic Zirconia
+        147536, -- Giant Pile of Wooden Coins
+        147869, -- Fel Meteorite
+        133877, -- Lean Shank Recipes
+        133886, -- Wildfowl Egg Recipes
+        133914, -- Fatty Bearsteak Recipes
+        133915, -- Big Gamy Ribs Recipes
+        133916, -- Leyblood Recipes
+        133917, -- Cursed Queenfish Recipes
+        133918, -- Mossgill Perch Recipes
+        133919, -- Highmountain Salmon Recipes
+        133920, -- Stormray Recipes
+        133921, -- Runescale Koi Recipes
+        133922, -- Black Barracuda Recipes
+        133923, -- Bacon Recipes
+        136359, -- Shaman's Pouch
+        136577, -- Mornath's Key
+        136602, -- Valeera's Note
+        137650, -- Bucket of Blue Paint
+        137651, -- Bucket of Teal Paint
+        137652, -- Bucket of Green Paint
+        137653, -- Bucket of Grey Paint
+        137654, -- Pile of Juggernaut Parts
+        137655, -- Deactivated Grey Juggernaut
+        137656, -- Deactivated Blue Juggernaut
+        137657, -- Deactivated Teal Juggernaut
+        137658, -- Deactivated Green Juggernaut
+        138097, -- Blackfuse's Power Core
+        138382, -- Lucky Rat's Tooth
+        138383, -- Old Lucky Coin
+        138384, -- Lucky Charm
+        138884, -- Throwing Sausage
+        139302, -- Etching from the Raven's Eye Tablet
+        139341, -- Winter Veil Gift
+        139343, -- Gently Shaken Gift
+        139375, -- Glorious Earwax Candle
+        139460, -- Seal of Broken Fate
+        139620, -- A Complete Copy of "Nat Pagle's Guide to Extreme Anglin'."
+        139623, -- Timolain's Phylactery
+        140330, -- Windfall Totem
+        140331, -- Skyhorn War Harness
+        140332, -- Rivermane War Harness
+        140333, -- Bloodtotem War Harness
+        140334, -- Highmountain War Harness
+        140655, -- Log
+        140731, -- Treasure Map: Highmountain
+        140743, -- Treasure Map: Stormheim
+        140744, -- Treasure Map: Azsuna
+        140745, -- Treasure Map: Val'sharah
+        140746, -- Treasure Map: Suramar
+        141700, -- Silver Mackerel Recipes
+        142266, -- Handful of Gizmos
+        147315, -- Smelly's Luckydo
+        147420, -- Pebble
+        149504, -- Smokywood Pastures Special Present
+        151345, -- Gently Shaken Gift
+        151350, -- Winter Veil Gift
+        152996, -- Vrykul Toy Boat
+        153219} -- Squished Demon Eye
     DatabaseIDs[CONS.LEGION_ID][CONS.QUEST_ID] = {
+    	143661, -- Soul Prism of the Illidari
+        139043, -- Tear of Elune
+        141351, -- Tear of Elune
         146975, -- Gladiator's Tattered Cloak
         147417, -- Gladiator's Tattered Cloak
         136834, -- Empowered Soul Shard
@@ -5982,21 +6202,6 @@ do
         130895, -- Stonehide Leather Crinet
         130896, -- Stonehide Leather Caparison
         130901, -- Candleking's Special Candle
-        130921, -- Pristine Violetglass Vessel
-        130922, -- Pristine Inert Leystone Charm
-        130923, -- Pristine Quietwine Vial
-        130924, -- Pristine Pre-War Highborne Tapestry
-        130925, -- Pristine Nobleman's Letter Opener
-        130926, -- Pristine Trailhead Drum
-        130927, -- Pristine Moosebone Fish-Hook
-        130928, -- Pristine Hand-Smoothed Pyrestone
-        130929, -- Pristine Drogbar Gem-Roller
-        130930, -- Pristine Stonewood Bow
-        130931, -- Pristine Imp's Cup
-        130932, -- Pristine Flayed-Skin Chronicle
-        130933, -- Pristine Malformed Abyssal
-        130934, -- Pristine Orb of Inner Chaos
-        130935, -- Pristine Houndstooth Hauberk
         130937, -- Fel Leather Cuff
         130942, -- Shimmering Snapper Scale
         130944, -- Needle Coral
@@ -6185,7 +6390,6 @@ do
         134083, -- Chipped Titan Disc Fragment
         134084, -- Part of the Infernal Device
         134085, -- Chamber Key Fragment
-        134086, -- Surveying Equipment
         134087, -- Page from The Purple Hills of Mac'Aree
         134088, -- Chapter from The Purple Hills of Mac'Aree
         134089, -- The Purple Hills of Mac'Aree
@@ -7646,6 +7850,8 @@ do
         138004, -- Pattern: Imbued Silkweave Flourish
         138007, -- Pattern: Imbued Silkweave Cover
         138010} -- Pattern: Imbued Silkweave Drape
+    table.insert(DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID], 129032) -- Roseate Pigment
+    table.insert(DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID], 129034) -- Sallow Pigment
     DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID][CONS.T_CLOTH_ID] = {
         127004, -- Imbued Silkweave
         124437, -- Shal'dorei Silk
@@ -7676,7 +7882,7 @@ do
         140784, -- Fel Piston Stabilizer
         140785, -- Hardened Circuitboard Plating
         147619} -- [CONS.QA] Big Stack Test
-    DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID][CONS.CT_FISHING_ID] = {
+    DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID][CONS.T_FISHING_ID] = {
         138967, -- Big Fountain Goldfish
         133725, -- Leyshimmer Blenny
         133727, -- Ghostly Queenfish
@@ -7768,16 +7974,16 @@ do
         133591, -- River Onion
         133592, -- Stonedark Snail
         133593} -- Royal Olive
-    DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_ANIMAL_ID] = {
+    DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_ANIMAL_ID] = {
         133680, -- Slice of Bacon
         124118, -- Fatty Bearsteak
         124119, -- Big Gamy Ribs
         124120, -- Leyblood
         124117} -- Lean Shank
-    DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_EGG_ID] = {
+    DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_EGG_ID] = {
         142336, -- Falcosaur Egg
         124121} -- Wildfowl Egg
-    DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_FISH_ID] = {
+    DatabaseIDs[CONS.LEGION_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_FISH_ID] = {
         124107, -- Cursed Queenfish
         124108, -- Mossgill Perch
         124109, -- Highmountain Salmon
@@ -7812,9 +8018,6 @@ do
         146967, -- White Sparkly Bauble
         146968, -- Glowing Fish Scale
         146969, -- Faintly Pulsing Felstone
-        130903, -- Ancient Suramar Scroll
-        130904, -- Highmountain Ritual-Stone
-        130905, -- Mark of the Deceiver
         137595, -- Viscous Transmutagen
         137596, -- Black Transmutagen
         137597, -- Oily Transmutagen
@@ -7824,7 +8027,206 @@ do
         146657, -- Felessence Phial
         146658, -- Felessence Phylactery
         146659} -- Nethershard Essence
-
+    DatabaseIDs[CONS.LEGION_ID][CONS.ORDER_HALL_ID][CONS.O_CHAMPION_ARMOR_ID] = {
+        147348, -- Bulky Armor Set
+        147349, -- Spiked Armor Set
+        147350, -- Invincible Armor Set
+        153005, -- Relinquished Armor Set
+        151842, -- Krokul Armor Set
+        151843, -- Mac'Aree Armor Set
+        151844, -- Xenedar Armor Set
+        136412, -- Heavy Armor Set
+        137207, -- Fortified Armor Set
+        137208} -- Indestructible Armor Set
+    DatabaseIDs[CONS.LEGION_ID][CONS.ORDER_HALL_ID][CONS.O_CHAMPION_EQUIPMENT_ID] = {
+        139816, -- Well-Worn Stone
+        139801, -- Doodad
+        139802, -- Auspicious Fetish
+        152438, -- Krokul Sledgehammer
+        152935, -- Wakener's Bauble
+        152445, -- Memento of the Lightforged
+        140572, -- Hasty Pocketwatch
+        140571, -- Potion of Energy
+        140573, -- Elixir of Overwhelming Focus
+        152927, -- Serrated Stone Axe
+        152440, -- Void-Touched Arinor Blossom
+        152443, -- Sanctified Armaments of the Light
+        140581, -- Sturdy Hiking Boots
+        152437, -- Viscid Demon Blood
+        140582, -- Bottomless Flask
+        152936, -- Azurelight Sapphire
+        140583, -- Vial of Timeless Breath
+        152444, -- Exalted Xenedar Hammer
+        152439, -- Pit Lord Tusk
+        152933, -- Shadowguard Void Effusion
+        152931, -- Xenic Tincture
+        152930, -- Vilefiend-Spine Whip
+        152934, -- Shadow-Soaked Stalker Heart
+        152447, -- Lightburst Charge
+        152929, -- Pronged Ridgestalker Spear
+        152442, -- Impervious Shadoweave Hood
+        152932, -- Runewarded Lightblade
+        139813, -- Swift Boots
+        139814, -- Carrot on a Stick
+        139799, -- Pathfinder's Saddle
+        152928, -- Archaic Seerstone
+        152441, -- Satchel of Lucidity
+        152446, -- Writ of Holy Orders
+        139792, -- Fruitful Bauble
+        139808, -- Curio of Abundant Happiness
+        139809, -- Elixir of Plenty
+        139795, -- Draught of Courage
+        139811, -- Necklace of Endless Memories
+        139812, -- Potion of Triton
+        139875, -- Undead Token
+        139876, -- Rune of Reckoning
+        139877, -- Death's Touch
+        139878, -- Relic of the Ebon Blade
+        147572, -- Sigil of Ebon Frost
+        139835, -- Marauder's Vestige
+        139836, -- Shadow Relic
+        139837, -- Demon's Sigil
+        139838, -- Essence of Malice
+        147571, -- Demonic Standard
+        139863, -- Elune's Sight
+        139864, -- Scroll of Growth
+        139865, -- Glowing Token
+        139866, -- Forest Ember
+        147570, -- Dreamgrove Leaf
+        139847, -- Bow of Ancient Kings
+        139848, -- Seeker's Scrip
+        139849, -- Windrunner's Gift
+        139850, -- Cloak of Deception
+        147569, -- Arcane Trap
+        139845, -- Band of Primordial Strength
+        139846, -- Highborne Bauble
+        139843, -- Conjurer's Bauble
+        139844, -- Arcanist's Trifle
+        147568, -- Essence of Nether
+        139859, -- Chi Empowered Jewel
+        139860, -- Tea of Blessing
+        139861, -- Mogu Madstone
+        139862, -- Bell of Fury
+        147567, -- Soothing Focus
+        139867, -- Justice Hammer
+        139868, -- Light's Shield
+        139869, -- Libram of Enlightenment
+        139870, -- Silver Hand Ornament
+        147566, -- Horn of Valor
+        139871, -- Holy Figurine
+        139872, -- Light's Command
+        139873, -- Bottled Sanity
+        139874, -- Sanity Edge
+        147565, -- Book of Lost Sermons
+        139831, -- Smoke Grenades
+        139832, -- Sleep Potion
+        139833, -- Leech Brew
+        139834, -- Vanishing Dust
+        147564, -- Diamond Stone
+        139839, -- Voodoo Post
+        139840, -- Earthly Pincer
+        139841, -- Totem of the Earth
+        139842, -- Furious Charge
+        147563, -- Stone Totem
+        139855, -- Skull of Embrace
+        139856, -- Demonic Brew
+        139857, -- Helm of Command
+        139858, -- Black Harvest Curio
+        147561, -- Relic of Demonic Influence
+        139851, -- Valarjar's Might
+        139852, -- War Banner
+        139853, -- Axe of the Valkyra
+        139854, -- Skull of a Fallen Foe
+        147560, -- Horn of Rage
+        139830, -- Demon in a Box
+        147557, -- Fel Imp Tooth
+        152448, -- Praetorium Tome of Arcana
+        139828, -- Queen's Feathers
+        139829, -- Potion of Sacrifice
+        147554, -- Harpy Feather
+        152454, -- Darklost Claw
+        147555, -- Vial of Sight
+        147556, -- Cloak of Concealment
+        152453, -- Fel-Infused Legion Effigy
+        152449, -- Azurelight Candelabra
+        152450, -- Augari Censorite Staff
+        152451, -- Volatile Stygian Scroll
+        152452, -- Pulsing Wrathguard Skull
+        139827, -- Brooch of Endless Dreams
+        139825, -- Tome of Secrets
+        139826, -- Eltrig's Grace
+        139821, -- Omen's Bidding
+        139804, -- Glacial Fang
+        139819, -- Embers of the Firelands
+        147553, -- Shard of Twisting Nether
+        139824, -- Light's Haven
+        139823, -- Nightmare's End
+        139822, -- Dust of Azeroth
+        147559, -- Ward of Infinite Fury
+        147558} -- Pouch of Wonder
+    DatabaseIDs[CONS.LEGION_ID][CONS.ORDER_HALL_ID][CONS.O_CHESTS_ID] = {
+        147432, -- Champion Equipment
+        153132, -- Coffer of Argus Equipment
+        139879, -- Crate of Champion Equipment
+        147905, -- Chest of Champion Equipment
+        150581, -- Chest of Useful Equipment
+        134086} -- Surveying Equipment
+    DatabaseIDs[CONS.LEGION_ID][CONS.ORDER_HALL_ID][CONS.O_CONSUMABLES_ID] = {
+        140749, -- Horn of Winter
+        143852, -- Lucky Rabbit's Foot
+        139419, -- Golden Banana
+        140760, -- Libram of Truth
+        140156, -- Blessing of the Order
+        139428, -- A Master Plan
+        143605, -- Strange Ball of Energy
+        139177, -- Shattered Soul
+        139420, -- Wild Mushroom
+        138883, -- Meryl's Conjured Refreshment
+        139376, -- Healing Well
+        139418, -- Healing Stream Totem
+        138412, -- Iresoul's Healthstone
+        140922, -- Imp Pact
+        139670, -- Scream of the Dead
+        143849, -- Summon Royal Guard
+        143850, -- Summon Grimtotem Warrior
+        142209, -- Dinner Invitation
+        -- Order Hall Gives
+        141961, -- Soul Flame of Rejuvenation
+        141962, -- Soul Flame of Castigation
+        141958, -- Soul Flame of Fortification
+        141960, -- Soul Flame of Insight
+        141959, -- Soul Flame of Alacrity
+        140216, -- Eagle Feather
+        140295, -- Badgercharm Brew
+        140293, -- Exploding Cask
+        140292, -- Tumblerun Brew
+        140291, -- Featherfoot Brew
+        140290, -- Seastrider Brew
+        140289, -- Lungfiller Brew
+        140288, -- Bubblebelly Brew
+        140256, -- Skysinger Brew
+        140253, -- Swiftpad Brew
+        140287, -- Stoutheart Brew
+        139447, -- Vial of Pure Light
+        139449, -- Essence of the Naaru
+        139452, -- Essence of the Light
+        139459, -- Blessing of the Light
+        139448, -- Vial of Dark Shadows
+        139450, -- Void Sphere
+        139451, -- Swirling Void Potion
+        139461, -- Rune of Darkness
+        141964, -- Flaming Demonheart
+        141965, -- Shadowy Demonheart
+        141966, -- Coercive Demonheart
+        141967, -- Whispering Demonheart
+        141968} -- Immense Demonheart
+    DatabaseIDs[CONS.LEGION_ID][CONS.ORDER_HALL_ID][CONS.O_TROOPS_ID] = {
+        152095, -- Krokul Ridgestalker
+        152096, -- Void-Purged Krokul
+        152097, -- Lightforged Bulwark
+        153006, -- Grimoire of Lost Knowledge
+        141028} -- Grimoire of Knowledge
+        
     DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.CONTAINERS_ID] = {
         118235, -- Ogre Diving Cap
         117445, -- Clefthoof Hide Satchel
@@ -7860,9 +8262,7 @@ do
         115511, -- Bizmo's Big Bang Boom Bomb
         115512, -- Gazlowe's Gargantuan Grenade
         109253, -- Ultimate Gnomish Army Knife
-        116983, -- Guide: Rogue Tracking
         109167, -- Findle's Loot-A-Rang
-        112059, -- Wormhole Centrifuge
         127655, -- Sassy Imp
         127666, -- Vial of Red Goo
         114943, -- Ultimate Gnomish Army Knife
@@ -7930,10 +8330,8 @@ do
         111457, -- Feast of Blood
         111458, -- Feast of the Waters
         111544, -- Frostboar Jerky
-        111842, -- Star Root Tuber
         113509, -- Conjured Mana Bun
         114238, -- Spiced Barbed Trout
-        114982, -- Song Flower
         115351, -- "Rylak Claws"
         115352, -- Telmor-Aruuna Hard Cheese
         115353, -- Tanaan Sweetmelon
@@ -8005,7 +8403,6 @@ do
         126934, -- Lemon Herb Filet
         126935, -- Fancy Darkmoon Feast
         126936, -- Sugar-Crusted Fish Feast
-        118897, -- Miner's Coffee
         116120, -- Tasty Talador Lunch
         118273, -- Perfect O'ruk Orange
         118274, -- Perfect Fuzzy Pear
@@ -8055,10 +8452,8 @@ do
         109222, -- Draenic Mana Potion
         109223, -- Healing Tonic
         109226, -- Draenic Rejuvenation Potion
-        114124, -- Phantom Potion
         115498, -- Ashran Healing Tonic
         115531, -- Swirling Ashran Potion
-        116925, -- Vintage Free Action Potion
         117415, -- Smuggled Tonic
         118006, -- Shieldtronic Shield
         118262, -- Brilliant Dreampetal
@@ -8093,28 +8488,20 @@ do
         118922} -- Oralius' Whispering Crystal
     DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.CONSUMABLES_ID][CONS.C_OTHER_ID] = {
         109184, -- Stealthman 54
-        114116, -- Bag of Salvaged Goods
         114225, -- Forgotten Apexis Trinket
         115466, -- Elemental Fragment
         115522, -- Swift Riding Crop
         115532, -- Flimsy X-Ray Goggles
-        115793, -- S.O.S. Relief Flare
         115795, -- S.O.S. Relief Flare
-        116397, -- Swift Riding Crop
-        116398, -- Flimsy X-Ray Goggles
         116414, -- Pet Supplies
         116979, -- Blackwater Anti-Venom
         116981, -- Fire Ammonite Oil
-        118473, -- Small Sack of Salvaged Goods
-        118697, -- Big Bag of Pet Supplies
         120321, -- Mystery Bag
         122460, -- Drained Blood Crystal
-        122535, -- Traveler's Pet Supplies
         124045, -- Smelly Musk Gland
         124093, -- Minor Blackfang Challenge Totem
         124094, -- Major Blackfang Challenge Totem
         124095, -- Prime Blackfang Challenge Totem
-        127751, -- Fel-Touched Pet Supplies
         116119, -- Ango'rosh Sorcerer Stone
         108683, -- Miniature Dark Portal
         110274, -- Jawless Skulker Bait
@@ -8130,7 +8517,6 @@ do
         118042, -- Conqueror's Tribute
         118111, -- Garrison Resources
         118699, -- Oil of Immolation
-        116062, -- Greater Darkmoon Pet Supplies
         107224, -- Celebration Package
         98551, -- Darkspear Battle Standard
         104039, -- Blackrock Blasting Powder
@@ -8161,9 +8547,7 @@ do
         112108, -- Cracked Egg
         112321, -- Enchanted Dust
         112499, -- Stinky Gloom Bombs
-        112737, -- Contract: Ka'la of the Frostwolves
         112791, -- Sargerei Cowl
-        112848, -- Contract: Daleera Moonfang
         112891, -- Sargerei Robe
         112893, -- Sargerei Slippers
         112904, -- Sargerei Disguise
@@ -8180,8 +8564,6 @@ do
         114246, -- "Skyterror" Personal Delivery System
         114633, -- XD-57 "Bullseye" Guided Rocket Kit
         114744, -- Sentry Turret Dispenser
-        114825, -- Contract: Ulna Thresher
-        114826, -- Contract: Bruma Swiftstone
         114835, -- Rooby Reat
         114850, -- Bubblefizz Bubbly
         114924, -- Prototype Mekgineer's Chopper
@@ -8198,23 +8580,11 @@ do
         116357, -- Poorly-Painted Egg
         116358, -- Intricately-Painted Egg
         116359, -- Magnificently-Painted Egg
-        116374, -- Beast Battle-Training Stone
-        116416, -- Humanoid Battle-Training Stone
-        116417, -- Mechanical Battle-Training Stone
-        116418, -- Critter Battle-Training Stone
-        116419, -- Dragonkin Battle-Training Stone
-        116420, -- Elemental Battle-Training Stone
-        116421, -- Flying Battle-Training Stone
-        116422, -- Magic Battle-Training Stone
-        116423, -- Undead Battle-Training Stone
-        116424, -- Aquatic Battle-Training Stone
-        116429, -- Flawless Battle-Training Stone
         116848, -- Hallowed Wand - Slime
         116850, -- Hallowed Wand - Ghoul
         116851, -- Hallowed Wand - Abomination
         116853, -- Hallowed Wand - Geist
         116854, -- Hallowed Wand - Spider
-        116915, -- Inactive Apexis Guardian
         116978, -- Rylakinator-3000 Power Cell
         118091, -- Follower XP Muffin
         118414, -- Awesomefish
@@ -8226,9 +8596,6 @@ do
         119126, -- Partial Receipt (Random)
         119158, -- Robo-Rooster
         119159, -- Happy Fun Skull
-        119164, -- Contract: Arakkoa Outcasts Follower
-        119168, -- Contract: Vol'jin's Spear Follower
-        119169, -- Contract: Wrynn's Vanguard Follower
         119209, -- Angry Brewfest Letter
         119210, -- Hearthstone Board
         119212, -- Winning Hand
@@ -8243,7 +8610,6 @@ do
         119816, -- Caged Mighty Talbuk
         119818, -- Caged Mighty Elekk
         119820, -- Caged Mighty Boar
-        119821, -- Contract: Dawnseeker Rukaryx
         120142, -- Coliseum Champion's Spoils
         120170, -- Partially-Digested Bag
         120182, -- Excess Potion of Accelerated Learning
@@ -8253,23 +8619,8 @@ do
         120348, -- Enchanted Crystal of Freezing
         120349, -- Enduring Vial of Swiftness
         122589, -- Ogre Waystone Conversions
-        126952, -- Ship: Destroyer
-        126983, -- Ship: Submarine
-        126986, -- Ship: Carrier
-        127134, -- Ship: Battleship
-        127135, -- Ship: Transport
         127408, -- Adventuring Journal
-        127755, -- Fel-Touched Battle-Training Stone
         127987, -- Celebration Package
-        128301, -- Ship: Submarine
-        128302, -- Ship: Battleship
-        128303, -- Ship: Destroyer
-        128439, -- Contract: Pallas
-        128440, -- Contract: Dowser Goodwell
-        128441, -- Contract: Solar Priest Vayx
-        128444, -- Blueprint: Oil Rig
-        128445, -- Contract: Dowser Bigspark
-        128490, -- Blueprint: Oil Rig
         128505, -- Celebration Wand - Murloc
         128506, -- Celebration Wand - Gnoll
         128634, -- Mysterious Brew
@@ -8279,17 +8630,10 @@ do
         128768, -- Candy Cane
         128793, -- Sack of Spiders
         133688, -- Tugboat Bobber
-        114616, -- War Ravaged Weaponry
-        114807, -- War Ravaged Armor Set
         110426, -- Goblin Hot Potato
-        114119, -- Crate of Salvage
-        114120, -- Big Crate of Salvage
-        116410, -- Scroll of Speed
-        116411, -- Scroll of Protection
         118664, -- Frostwolf Elixir
         118665, -- Exarch Elixir
         118667, -- Steamwheedle Elixir
-        118903, -- Preserved Mining Pick
         118905, -- Sinister Spores
         119216, -- Super Sticky Glitter Bomb
         120257, -- Drums of Fury
@@ -8298,62 +8642,22 @@ do
         112384, -- Reflecting Prism
         112498, -- Prismatic Focusing Lens
         113143, -- Glowing Honeycomb
-        114128, -- Balanced Weapon Enhancement
-        114745, -- Braced Armor Enhancement
         115463, -- Elixir of Shadow Sight
         115464, -- Lingering Frost Essence
         115470, -- Lingering Time Bubble
         118046, -- Rubber Duck
         118054, -- Discarded Bone
         118236, -- Counterfeit Coin
-        119233, -- Contract: Kaz the Shrieker
-        119240, -- Contract: Lokra
-        119242, -- Contract: Magister Serena
-        119243, -- Contract: Magister Krelas
-        119244, -- Contract: Hulda Shadowblade
-        119245, -- Contract: Dark Ranger Velonara
-        119252, -- Contract: Rangari Erdanii
-        119253, -- Contract: Spirit of Bony Xuk
-        119254, -- Contract: Pitfighter Vaandaam
-        119255, -- Contract: Bruto
-        119256, -- Contract: Glirin
-        119257, -- Contract: Penny Clobberbottom
-        119267, -- Contract: Ziri'ak
-        119288, -- Contract: Daleera Moonfang
-        119291, -- Contract: Artificer Andren
-        119292, -- Contract: Vindicator Onaala
-        119296, -- Contract: Rangari Chel
-        119298, -- Contract: Ranger Kaalya
-        119418, -- Contract: Morketh Bladehowl
-        119420, -- Contract: Miall
         119435, -- Path of Flame
         119449, -- Shadowberry
-        120301, -- Armor Enhancement Token
-        120302, -- Weapon Enhancement Token
         120322, -- Klinking Stacked Card Deck
         120324, -- Bursting Stacked Card Deck
-        122135, -- Contract: Greatmother Geyah
-        122136, -- Contract: Kal'gor the Honorable
-        122137, -- Contract: Bruma Swiftstone
-        122138, -- Contract: Ulna Thresher
         124506, -- Vial of Fel Cleansing
-        127833, -- Ship: Destroyer
-        128487, -- Ship: The Awakener
-        128488, -- Ship: The Awakener
-        128638, -- Ship: Destroyer
-        128639, -- Ship: Destroyer
-        128640, -- Ship: Destroyer
-        128641, -- Ship: Destroyer
-        128642, -- Ship: Transport
-        114081, -- Blackrock Weaponry
-        114806, -- Blackrock Armor Set
         113212, -- Treasure Map: Tanaan Jungle
         115513, -- Wrynn's Vanguard Battle Standard
         115514, -- Vol'jin's Spear Battle Standard
         115519, -- Flask of the Honorbound
         115525, -- Scary Ogre Face
-        117013, -- Wand of Lightning Shield
-        117016, -- Wand of Arcane Imprisonment
         117492, -- Relic of Rukhmar
         118666, -- Arakkoa Elixir
         118668, -- Laughing Skull Elixir
@@ -8391,7 +8695,6 @@ do
         128453, -- Saberstalkers Battle Standard
         128454, -- Order of the Awakened Battle Standard
         128474, -- Treasure Map: Tanaan Jungle
-        128502, -- Hunter's Seeking Crystal
         113670, -- Mournful Moan of Murmur
         118222, -- Spirit of Bashiok
         112087, -- Obsidian Frostwolf Petroglyph
@@ -8405,56 +8708,24 @@ do
         110425, -- Gnomish Celebration Enforcer
         110428, -- Goblin Body-Building Competition
         111408, -- Discarded Lucky Coin
-        114129, -- Striking Weapon Enhancement
-        114808, -- Fortified Armor Enhancement
         117398, -- Everbloom Seed Pouch
         118115, -- Fearsome Battle Standard
         118123, -- Fearsome Battle Standard
-        118475, -- Hearthstone Strategy Guide
         118630, -- Hyper Augment Rune
         118631, -- Stout Augment Rune
         118632, -- Focus Augment Rune
         118670, -- Inspiring Battle Standard
         119035, -- Inspiring Battle Standard
         119160, -- Tickle Totem
-        119161, -- Contract: Karg Bloodfury
-        119162, -- Contract: Cleric Maluuf
-        119165, -- Contract: Professor Felblast
-        119166, -- Contract: Cacklebone
-        119167, -- Contract: Vindicator Heluun
-        119248, -- Contract: Dawnseeker Rukaryx
         120323, -- Bulging Stacked Card Deck
         120325, -- Overflowing Stacked Card Deck
         122275, -- Sun-touched Feather of Rukhmar
-        125786, -- Ship Deed: Carrier
-        125787, -- Bilge Pump
-        126950, -- Equipment Blueprint: Bilge Pump
-        127662, -- High Intensity Fog Lights
-        127663, -- Trained Shark Tank
-        127880, -- Ice Cutter
-        127881, -- Gyroscopic Internal Stabilizer
-        127882, -- Blast Furnace
-        127883, -- True Iron Rudder
-        127884, -- Felsmoke Launcher
-        127886, -- Unsinkable
         127887, -- Food Storage Bay
         127888, -- Automated Sky Scanner
         127889, -- Ammo Reserves
         127890, -- Sonic Amplification Field
         127891, -- Extra Quarters
         127892, -- Q-43 Noisemaker Mines
-        127894, -- Tuskarr Fishing Net
-        127895, -- Ghostly Spyglass
-        128231, -- Equipment Blueprint: Trained Shark Tank
-        128232, -- Equipment Blueprint: High Intensity Fog Lights
-        128250, -- Equipment Blueprint: Unsinkable
-        128251, -- Equipment Blueprint: Tuskarr Fishing Net
-        128252, -- Equipment Blueprint: True Iron Rudder
-        128255, -- Equipment Blueprint: Ice Cutter
-        128256, -- Equipment Blueprint: Gyroscopic Internal Stabilizer
-        128257, -- Equipment Blueprint: Ghostly Spyglass
-        128258, -- Equipment Blueprint: Felsmoke Launchers
-        128260, -- Equipment Blueprint: Blast Furnace
         128294, -- Trade Agreement: Arakkoa Outcasts
         128312, -- Elixir of the Rapid Mind
         128315, -- Medallion of the Legion
@@ -8464,37 +8735,27 @@ do
         128489, -- Equipment Blueprint: Unsinkable
         128491, -- Equipment Blueprint: Tuskarr Fishing Net
         128776, -- Red Wooden Sled
-        120313, -- Sanketsu
-        114622, -- Goredrenched Weaponry
-        114746, -- Goredrenched Armor Set
         128307, -- Draenic Weaponry
         128308, -- Draenic Armor Set
-        116984, -- Frost Wyrm Egg
-        118425, -- Nesingwary's Lost Horn
-        118426, -- Scroll of Invoke Yu'lon, the Jade Serpent
         118572, -- Illusion: Flames of Ragnaros
         118904, -- Unleashed Mania
         120286, -- Enchanter's Illusion - Glorious Tyranny
         120287, -- Enchanter's Illusion - Primal Victory
-        122457, -- Ultimate Battle-Training Stone
         122466, -- Heart of Oak
         122468, -- Runed Greatstone
         122472, -- Bloodied Iron Horde Banner
         122473, -- Legion Beacon
         122474, -- Arcane Highmaul Relic
         122475, -- Void Prison
-        128503, -- Master Hunter's Seeking Crystal
         112324, -- Nightmarish Hitching Post
         113193, -- Mythical Battle-Pet Stone
-        114131, -- Power Overrun Weapon Enhancement
-        114822, -- Heavily Reinforced Armor Enhancement
-        120311, -- The Blademaster's Necklace
-        128314, -- Frozen Arms of a Hero
         122340, -- Timeworn Heirloom Armor Casing
         122341, -- Timeworn Heirloom Scabbard
         122338, -- Ancient Heirloom Armor Casing
         122339, -- Ancient Heirloom Scabbard
         117401} -- Nat's Draenic Fishing Journal
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.CURRENCY_ID] = {
+        124099} -- Blackfang Claw
     DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.GEMS_ID] = {
         115803, -- Critical Strike Taladite
         115804, -- Haste Taladite
@@ -8725,6 +8986,7 @@ do
         122703, -- Chauffeured Chopper
         110672} -- Grimoire of the Four Winds
     DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID] = {
+        116415, -- Pet Charm
         113216, -- Elekk Plushie
         116155, -- Lovebird Hatchling
         116439, -- Blazing Cindercrawler
@@ -8834,6 +9096,51 @@ do
         129217, -- Warm Arcane Crystal
         129218, -- Glittering Arcane Crystal
         134047} -- Baby Winston
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID][CONS.MC_SUPPLIES_ID] = {
+        122535, -- Traveler's Pet Supplies
+        116062, -- Greater Darkmoon Pet Supplies
+        118697, -- Big Bag of Pet Supplies
+        127751} -- Fel-Touched Pet Supplies
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID][CONS.MC_TRAINING_STONE_ID] = {
+        122457, -- Ultimate Battle-Training Stone
+        127755, -- Fel-Touched Battle-Training Stone
+        116374, -- Beast Battle-Training Stone
+        116416, -- Humanoid Battle-Training Stone
+        116417, -- Mechanical Battle-Training Stone
+        116418, -- Critter Battle-Training Stone
+        116419, -- Dragonkin Battle-Training Stone
+        116420, -- Elemental Battle-Training Stone
+        116421, -- Flying Battle-Training Stone
+        116422, -- Magic Battle-Training Stone
+        116423, -- Undead Battle-Training Stone
+        116424, -- Aquatic Battle-Training Stone
+        116429} -- Flawless Battle-Training Stone
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_HEARTSTONE_ID] = {
+        128353, -- Admiral's Compass
+        110560, -- Garrison Hearthstone
+        118663, -- Relic of Karabor
+        118662, -- Bladespire Relic
+        128502, -- Hunter's Seeking Crystal
+        128503} -- Master Hunter's Seeking Crystal
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_JEWELRY_ID] = {
+        118907, -- Pit Fighter's Punching Ring (Bizmo's Brawlpub)
+        118908} -- Pit Fighter's Punching Ring (Brawl'gar Arena)
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_SCROLLS_ID] = {
+        119183} -- Scroll of Risky Recall
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_TOYS_ID] = {
+        112059} -- Wormhole Centrifuge
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_CRATES_ID]= {
+        117386, -- Crate of Pandaren Archaeology Fragments
+        117387, -- Crate of Mogu Archaeology Fragments
+        117388} -- Crate of Mantid Archaeology Fragments
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_KEY_STONES_ID] = {
+        109584, -- Ogre Missive
+        109585, -- Arakkoa Cipher
+        108439} -- Draenor Clan Orator Cane
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_OTHERS_ID] = {
+        122606, -- Explorer's Notebook
+        117389, -- Draenor Archaeologist's Lodestone
+        117390} -- Draenor Archaeologist's Map
     DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.MISCELLANEOUS_ID][CONS.M_OTHER_ID] = {
         113203, -- Punctured Breastplate
         113244, -- Soleless Treads
@@ -8889,32 +9196,9 @@ do
         119200, -- Jewelcrafting Payment
         119201, -- Jewelcrafting Payment
         128327, -- Small Pouch of Coins
-        128373, -- Rush Order: Shipyard
         116129, -- Dessicated Orc's Coin Pouch
         106895, -- Iron-Bound Junkbox
         108740, -- Stolen Weapons
-        110560, -- Garrison Hearthstone
-        122307, -- Rush Order: Barn
-        122487, -- Rush Order: Gladiator's Sanctum
-        122490, -- Rush Order: Dwarven Bunker
-        122491, -- Rush Order: War Mill
-        122496, -- Rush Order: Garden Shipment
-        122497, -- Rush Order: Garden Shipment
-        122500, -- Rush Order: Gnomish Gearworks
-        122501, -- Rush Order: Goblin Workshop
-        122502, -- Rush Order: Mine Shipment
-        122503, -- Rush Order: Mine Shipment
-        122576, -- Rush Order: Alchemy Lab
-        122590, -- Rush Order: Enchanter's Study
-        122591, -- Rush Order: Engineering Works
-        122592, -- Rush Order: Gem Boutique
-        122593, -- Rush Order: Scribe's Quarters
-        122594, -- Rush Order: Tailoring Emporium
-        122595, -- Rush Order: The Forge
-        122596, -- Rush Order: The Tannery
-        113821, -- Battered Iron Horde Helmet
-        113822, -- Ravaged Iron Horde Belt
-        113823, -- Crusted Iron Horde Pauldrons
         118067, -- Bartering Chip
         112623, -- Pack of Fishing Supplies
         105914, -- Danger Detector Boots
@@ -8934,7 +9218,6 @@ do
         112997, -- Emerald Ring
         112998, -- Diamond Ring
         112999, -- Sapphire Ring
-        113991, -- Iron Trap
         114054, -- Goldtoe's Key
         114141, -- Fang-Scarred Frostwolf Axe
         114143, -- Frostwolf Ancestry Scrimshaw
@@ -8980,15 +9263,12 @@ do
         114206, -- Apexis Scroll
         114207, -- Beakbreaker of Terokk
         115002, -- Raw Beast Hide
-        115009, -- Improved Iron Trap
-        115010, -- Deadly Iron Trap
         115467, -- Barkskin Tome
         115471, -- NC-17 Sonic "Boom" Box
         115530, -- N.U.K.U.L.A.R. Target Painter
         116020, -- An Old Key
         116172, -- Perky Blaster
         116392, -- Big Bag of Booty
-        116415, -- Pet Charm
         116441, -- Highly Enriched Blixtherium Shells
         116452, -- Spring-loaded Spike Trap
         116986, -- Fine Blue and Gold Tent
@@ -9014,10 +9294,6 @@ do
         117007, -- Ornate Horde Tent
         117008, -- Voodoo Doctor's Hovel
         117009, -- Nomad's Spiked Tent
-        117386, -- Crate of Pandaren Archaeology Fragments
-        117387, -- Crate of Mogu Archaeology Fragments
-        117388, -- Crate of Mantid Archaeology Fragments
-        117397, -- Nat's Lucky Coin
         117491, -- Ogre Waystone
         118043, -- Broken Bones
         118099, -- Gorian Artifact Fragment
@@ -9051,12 +9327,6 @@ do
         119100, -- Partial Receipt: Pickled Red Herring
         119101, -- Partial Receipt: Invisible Dust
         119102, -- Partial Receipt: True Iron Door Handles
-        119810, -- Meaty Caged Beast
-        119813, -- Furry Caged Beast
-        119814, -- Leathery Caged Beast
-        119815, -- Caged Mighty Wolf
-        119817, -- Caged Mighty Riverbeast
-        119819, -- Caged Mighty Clefthoof
         120146, -- Smuggled Sack of Gold
         120147, -- Bloody Gold Purse
         120312, -- Bulging Sack of Coins
@@ -9068,7 +9338,6 @@ do
         122154, -- Artificer Maatun's Journal
         122398, -- Garrison Scout Report
         122677, -- Bag of Gold
-        124099, -- Blackfang Claw
         124670, -- Sealed Darkmoon Crate
         127141, -- Bloated Thresher
         128206, -- Crackle-o-Matic XL
@@ -9091,9 +9360,7 @@ do
         128669, -- Old Box of Decorations
         128670, -- Savage Gift
         113258, -- Blingtron 5000 Gift Package
-        114125, -- Preserved Discombobulator Ray
         116920, -- True Steel Lockbox
-        119183, -- Scroll of Risky Recall
         119438, -- Automated Critter Defense Cannon
         120320, -- Invader's Abandoned Sack
         122195, -- Music Roll: Legends of Azeroth
@@ -9154,15 +9421,10 @@ do
         113002, -- Ruby Amulet
         113003, -- Opal Amulet
         113130, -- Recipe: Fiona's Remedy
-        114242, -- Abu'Gar's Vitality
-        114243, -- Abu'Gar's Finest Reel
-        114245, -- Abu'Gar's Favorite Lure
         116114, -- Prestige Card: The Turn
         116202, -- Pet Care Package
         116404, -- Pilgrim's Bounty
         116456, -- Scroll of Storytelling
-        117389, -- Draenor Archaeologist's Lodestone
-        117390, -- Draenor Archaeologist's Map
         117573, -- Wayfarer's Bonfire
         118190, -- Blixthraz's Frightening Grudgesolver
         118375, -- Arcane Crystal Module
@@ -9183,16 +9445,10 @@ do
         119439, -- Personal Voodoo Doll
         119440, -- Training Shoes
         119447, -- Training Wheels
-        128353, -- Admiral's Compass
         111925, -- Engineering Supplies
-        114126, -- Disposable Pocket Flying Machine
-        114629, -- Proximity Alarm-o-Bot 2000
         115499, -- Personal Rocket Courier
-        115500, -- Disposable Pocket Flying Machine
         115506, -- Treessassin's Guise
         116113, -- Breath of Talador
-        118109, -- Disposable Pocket Flying Machine
-        118110, -- Disposable Pocket Flying Machine
         118191, -- Archmage Vargoth's Spare Staff
         118193, -- Mysterious Shining Lockbox
         118224, -- Ogre Brewing Kit
@@ -9213,8 +9469,6 @@ do
         120319, -- Invader's Damaged Cache
         120857, -- Barrel of Bandanas
         122117, -- Cursed Feather of Ikzan
-        122298, -- Bodyguard Miniaturization Device
-        122606, -- Explorer's Notebook
         122613, -- Stash of Dusty Music Rolls
         122618, -- Misprinted Draenic Coin
         122637, -- S.E.L.F.I.E. Camera
@@ -9222,7 +9476,6 @@ do
         122700, -- Portable Audiophone
         123851, -- Photo B.O.M.B.
         123857, -- Runic Pouch
-        123858, -- Follower Retraining Scroll Case
         123975, -- Greater Bounty Spoils
         126910, -- Silver Strongbox
         126915, -- Silver Strongbox
@@ -9251,8 +9504,6 @@ do
         111476, -- Stolen Breath
         113271, -- Giant Kaliri Egg
         113540, -- Ba'ruun's Bountiful Bloom
-        116394, -- Outpost Building Assembly Notes
-        116395, -- Comprehensive Outpost Construction Guide
         117550, -- Angry Beehive
         117569, -- Giant Deathweb Egg
         118244, -- Iron Buccaneer's Hat
@@ -9278,69 +9529,10 @@ do
         114634, -- Icy Satchel of Helpful Goods
         129926, -- Mark of the Ashtongue
         122122, -- Darkmoon Tonk Controller
-        107694, -- Lunarfall Inn, Level 2
-        109062, -- Mage Tower, Level 2
-        109063, -- Mage Tower, Level 3
-        109065, -- Lunarfall Inn, Level 3
-        109254, -- Lumber Mill, Level 2
-        109255, -- Lumber Mill, Level 3
-        109256, -- Engineering Works, Level 2
-        109257, -- Engineering Works, Level 3
-        109258, -- Engineering Works, Level 1
-        109576, -- Lunarfall Excavation, Level 2
-        109577, -- Herb Garden, Level 2
-        109578, -- Fishing Shack
         110678, -- Darkmoon Ticket Fanny Pack
         111418, -- Mushroom Juice
         111474, -- Colossal Pearl
         111543, -- Pile of Frostfire Turnips
-        111812, -- Alchemy Lab, Level 1
-        111813, -- The Forge, Level 1
-        111814, -- Gem Boutique, Level 1
-        111815, -- Scribe's Quarters, Level 1
-        111816, -- Tailoring Emporium, Level 1
-        111817, -- Enchanter's Study, Level 1
-        111818, -- The Tannery, Level 1
-        111927, -- Fishing Shack, Level 2
-        111928, -- Fishing Shack, Level 3
-        111929, -- Alchemy Lab, Level 2
-        111930, -- Alchemy Lab, Level 3
-        111956, -- Barracks, Level 1
-        111957, -- Salvage Yard, Level 1
-        111966, -- Dwarven Bunker, Level 2
-        111967, -- Dwarven Bunker, Level 3
-        111968, -- Barn, Level 2
-        111969, -- Barn, Level 3
-        111970, -- Barracks, Level 2
-        111971, -- Barracks, Level 3
-        111972, -- Enchanter's Study, Level 2
-        111973, -- Enchanter's Study, Level 3
-        111974, -- Gem Boutique, Level 2
-        111975, -- Gem Boutique, Level 3
-        111976, -- Salvage Yard, Level 2
-        111977, -- Salvage Yard, Level 3
-        111978, -- Scribe's Quarters, Level 2
-        111979, -- Scribe's Quarters, Level 3
-        111980, -- Gladiator's Sanctum, Level 2
-        111981, -- Gladiator's Sanctum, Level 3
-        111982, -- Storehouse, Level 2
-        111983, -- Storehouse, Level 3
-        111984, -- Gnomish Gearworks, Level 2
-        111985, -- Gnomish Gearworks, Level 3
-        111986, -- Trading Post, Level 2
-        111987, -- Trading Post, Level 3
-        111988, -- The Tannery, Level 2
-        111989, -- The Tannery, Level 3
-        111990, -- The Forge, Level 2
-        111991, -- The Forge, Level 3
-        111992, -- Tailoring Emporium, Level 2
-        111993, -- Tailoring Emporium, Level 3
-        111996, -- Lunarfall Excavation, Level 3
-        111997, -- Herb Garden, Level 3
-        111998, -- Menagerie, Level 2
-        111999, -- Menagerie, Level 3
-        112002, -- Stables, Level 2
-        112003, -- Stables, Level 3
         113004, -- Locket of Dreams
         113005, -- Chain of Hopes
         113006, -- Choker of Nightmares
@@ -9354,25 +9546,12 @@ do
         116067, -- Ring of Broken Promises
         116115, -- Blazing Wings
         116139, -- Haunting Memento
-        116185, -- War Mill, Level 2
-        116186, -- War Mill, Level 3
-        116196, -- Spirit Lodge, Level 2
-        116197, -- Spirit Lodge, Level 3
-        116200, -- Goblin Workshop, Level 2
-        116201, -- Goblin Workshop, Level 3
-        116248, -- Frostwall Mines, Level 2
-        116249, -- Frostwall Mines, Level 3
         116400, -- Silver-Plated Turkey Shooter
-        116431, -- Frostwall Tavern, Level 2
-        116432, -- Frostwall Tavern, Level 3
         116435, -- Cozy Bonfire
         116440, -- Burning Defender's Medallion
         116758, -- Brewfest Banner
         118100, -- Highmaul Relic
-        118215, -- Book of Garrison Blueprints
-        118354, -- Follower Retraining Certificate
         118427, -- Autographed Hearthstone Card
-        118474, -- Supreme Manual of Dance
         118695, -- Toxicfang Venom
         118924, -- Cache of Arms
         118925, -- Plundered Booty
@@ -9408,23 +9587,12 @@ do
         122128, -- Checkered Flag
         122129, -- Fire-Eater's Vial
         122191, -- Bloody Stack of Invitations
-        122272, -- Follower Ability Retraining Manual
-        122273, -- Follower Trait Retraining Guide
         122274, -- Tome of Knowledge
         122283, -- Rukhmar's Sacred Memory
         122304, -- Fandral's Seed Pouch
         122342, -- Auxiliary Scouting Report
         122514, -- Mission Completion Orders
-        122580, -- Ogre Buddy Handbook
-        122582, -- Guide to Arakkoa Relations
-        122583, -- Grease Monkey Guide
-        122584, -- Winning with Wildlings
-        126900, -- Ship Blueprint: Destroyer
         126931, -- Seafarer's Slidewhistle
-        127267, -- Ship Blueprint: Carrier
-        127268, -- Ship Blueprint: Transport
-        127269, -- Ship Blueprint: Battleship
-        127270, -- Ship Blueprint: Submarine
         127695, -- Spirit Wand
         127696, -- Magic Pet Mirror
         127707, -- Indestructible Bone
@@ -9436,7 +9604,6 @@ do
         128316, -- Bulging Barrel of Oil
         128319, -- Void-Shrouded Satchel
         128328, -- Skoller's Bag of Squirrel Treats
-        128492, -- Ship Blueprint: Battleship
         128507, -- Inflatable Thunderfury, Blessed Blade of the Windseeker
         128636, -- Endothermic Blaster
         128794, -- Sack of Spectral Spiders
@@ -9444,8 +9611,6 @@ do
         115501, -- Kowalski's Music Box
         115505, -- LeBlanc's Recorder
         116396, -- LeBlanc's Recorder
-        118662, -- Bladespire Relic
-        118663, -- Relic of Karabor
         113575, -- Secretive Whistle
         116980, -- Invader's Forgotten Treasure
         117414, -- Stormwind Guard Armor Package
@@ -9495,7 +9660,13 @@ do
         127115, -- Tome of Chaos
         115280, -- Abrogator Stone
         115981, -- Abrogator Stone Cluster
-        120334} -- Satchel of Cosmic Mysteries
+        120334, -- Satchel of Cosmic Mysteries
+        -- JUNK
+        122718, -- Clinking Present
+        133542, -- Tosselwrench's Mega-Accurate Simulation Viewfinder
+        113574, -- Scrap of Cloth
+        113576, -- Scrap of Cloth
+        133545} -- "New!" Kaja'Cola
     DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.QUEST_ID] = {
         107399, -- Limbflayer's Limbflayer
         107400, -- Kaz's Crazy Crate
@@ -9622,7 +9793,6 @@ do
         128271, -- Equipment Blueprint: Ghostly Spyglass
         128272, -- Equipment Blueprint: Felsmoke Launchers
         128274, -- Equipment Blueprint: Blast Furnace
-        113681, -- Iron Horde Scraps
         72108, -- Stuff Tail
         92752, -- Buttonbelly Mushroom
         93396, -- Plundered Profferings
@@ -10517,9 +10687,6 @@ do
         133160} -- Commendation of Therazane
     DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.RECIPES_ID][CONS.R_BOOKS_ID] = {
         113992, -- Scribe's Research Notes
-        114843, -- Handbook: Pick Pocket
-        112154, -- Guide: Disengage
-        118760, -- Book of Rebirth
         109586, -- Brittle Cartography Journal
         111349, -- A Treatise on Mining in Draenor
         111350, -- A Compendium of the Herbs of Draenor
@@ -10531,17 +10698,7 @@ do
         120138, -- Tome of Polymorph: Monkey
         120139, -- Tome of Polymorph: Penguin
         120140, -- Tome of Polymorph: Porcupine
-        111926, -- Codex of Ascension
-        112005, -- The Jailer's Libram
-        114844, -- Scroll of Touch of Death
-        114845, -- Tome of Blink
-        114846, -- Sigil of Dark Simulacrum
-        114847, -- Tablet of Ghost Wolf
-        114848, -- Grimoire Of Convert Demon
-        114849, -- Manual Of Spell Reflection
-        116982, -- Handbook: Vanish
-        120327, -- Guide: Sharpshooting
-        114842} -- Book of Flight Form
+        120327} -- Guide: Sharpshooting
     DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.RECIPES_ID][CONS.R_ALCHEMY_ID] = {
         112022, -- Recipe: Mighty Shadow Protection Potion
         112023, -- Recipe: Draenic Philosopher's Stone
@@ -10818,6 +10975,8 @@ do
         122716, -- Pattern: Primal Weaving
         127724, -- Recipe: Mighty Hexweave Essence
         127742} -- Recipe: Savage Hexweave Essence
+    table.insert(DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID], 113111) -- Warbinder's Ink
+    table.insert(DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID], 114931) -- Cerulean Pigment
     DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID][CONS.T_CLOTH_ID] = {
         111556, -- Hexweave Cloth
         111557} -- Sumptuous Fur
@@ -10837,7 +10996,7 @@ do
         114056, -- Didi's Delicate Assembly
         111366, -- Gearspring Parts
         119299} -- Secret of Draenor Engineering
-    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID][CONS.CT_FISHING_ID] = {
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID][CONS.T_FISHING_ID] = {
         111671, -- Enormous Abyssal Gulper Eel
         111664, -- Abyssal Gulper Eel
         111659, -- Small Abyssal Gulper Eel
@@ -10890,17 +11049,17 @@ do
         110611, -- Burnished Leather
         110609, -- Raw Beast Hide
         110610} -- Raw Beast Hide Scraps
-    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_ANIMAL_ID] = {
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_ANIMAL_ID] = {
         109131, -- Raw Clefthoof Meat
         109134, -- Raw Elekk Meat
         109135, -- Raw Riverbeast Meat
         109136, -- Raw Boar Meat
         109132, -- Raw Talbuk Meat
         128500} -- Fel Ham
-    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_EGG_ID] = {
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_EGG_ID] = {
         109133, -- Rylak Egg
         128499} -- Fel Egg
-    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_FISH_ID] = {
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_FISH_ID] = {
         109143, -- Abyssal Gulper Eel Flesh
         109144, -- Blackwater Whiptail Flesh
         109140, -- Blind Lake Sturgeon Flesh
@@ -10932,15 +11091,11 @@ do
         113344, -- Blood Card
         113345, -- Blood Card
         113355, -- Card of Omens
-        114781, -- Timber
         108996, -- Alchemical Catalyst
         112377, -- War Paints
         115524, -- Taladite Crystal
         118472, -- Savage Blood
-        108439, -- Draenor Clan Orator Cane
         108738, -- Giant Draenor Clam
-        109584, -- Ogre Missive
-        109585, -- Arakkoa Cipher
         113346, -- Blood Card
         113347, -- Blood Card
         113348, -- Blood Card
@@ -10982,6 +11137,303 @@ do
         113353, -- Blood Card
         113354} -- Blood Card
 
+
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.GARRISON_ID] = {
+        116395, -- Comprehensive Outpost Construction Guide
+        116394} -- Outpost Building Assembly Notes
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.GARRISON_ID][CONS.G_BLUEPRINTS_ID] = {
+        118215, -- Book of Garrison Blueprints
+        111812, -- Garrison Blueprint: Alchemy Lab, Level 1
+        111929, -- Garrison Blueprint: Alchemy Lab, Level 2
+        111930, -- Garrison Blueprint: Alchemy Lab, Level 3
+        111968, -- Garrison Blueprint: Barn, Level 2
+        111969, -- Garrison Blueprint: Barn, Level 3
+        111956, -- Garrison Blueprint: Barracks, Level 1
+        111970, -- Garrison Blueprint: Barracks, Level 2
+        111971, -- Garrison Blueprint: Barracks, Level 3
+        111966, -- Garrison Blueprint: Dwarven Bunker, Level 2
+        111967, -- Garrison Blueprint: Dwarven Bunker, Level 3
+        111817, -- Garrison Blueprint: Enchanter's Study, Level 1
+        111972, -- Garrison Blueprint: Enchanter's Study, Level 2
+        111973, -- Garrison Blueprint: Enchanter's Study, Level 3
+        109258, -- Garrison Blueprint: Engineering Works, Level 1
+        109256, -- Garrison Blueprint: Engineering Works, Level 2
+        109257, -- Garrison Blueprint: Engineering Works, Level 3
+        109578, -- Garrison Blueprint: Fishing Shack
+        111927, -- Garrison Blueprint: Fishing Shack, Level 2
+        111928, -- Garrison Blueprint: Fishing Shack, Level 3
+        116248, -- Garrison Blueprint: Frostwall Mines, Level 2
+        116249, -- Garrison Blueprint: Frostwall Mines, Level 3
+        116431, -- Garrison Blueprint: Frostwall Tavern, Level 2
+        116432, -- Garrison Blueprint: Frostwall Tavern, Level 3
+        111814, -- Garrison Blueprint: Gem Boutique, Level 1
+        111974, -- Garrison Blueprint: Gem Boutique, Level 2
+        111975, -- Garrison Blueprint: Gem Boutique, Level 3
+        111980, -- Garrison Blueprint: Gladiator's Sanctum, Level 2
+        111981, -- Garrison Blueprint: Gladiator's Sanctum, Level 3
+        111984, -- Garrison Blueprint: Gnomish Gearworks, Level 2
+        111985, -- Garrison Blueprint: Gnomish Gearworks, Level 3
+        116200, -- Garrison Blueprint: Goblin Workshop, Level 2
+        116201, -- Garrison Blueprint: Goblin Workshop, Level 3
+        109577, -- Garrison Blueprint: Herb Garden, Level 2
+        111997, -- Garrison Blueprint: Herb Garden, Level 3
+        109254, -- Garrison Blueprint: Lumber Mill, Level 2
+        109255, -- Garrison Blueprint: Lumber Mill, Level 3
+        109576, -- Garrison Blueprint: Lunarfall Excavation, Level 2
+        111996, -- Garrison Blueprint: Lunarfall Excavation, Level 3
+        107694, -- Garrison Blueprint: Lunarfall Inn, Level 2
+        109065, -- Garrison Blueprint: Lunarfall Inn, Level 3
+        109062, -- Garrison Blueprint: Mage Tower, Level 2
+        109063, -- Garrison Blueprint: Mage Tower, Level 3
+        111998, -- Garrison Blueprint: Menagerie, Level 2
+        111999, -- Garrison Blueprint: Menagerie, Level 3
+        111957, -- Garrison Blueprint: Salvage Yard, Level 1
+        111976, -- Garrison Blueprint: Salvage Yard, Level 2
+        111977, -- Garrison Blueprint: Salvage Yard, Level 3
+        111815, -- Garrison Blueprint: Scribe's Quarters, Level 1
+        111978, -- Garrison Blueprint: Scribe's Quarters, Level 2
+        111979, -- Garrison Blueprint: Scribe's Quarters, Level 3
+        116196, -- Garrison Blueprint: Spirit Lodge, Level 2
+        116197, -- Garrison Blueprint: Spirit Lodge, Level 3
+        112002, -- Garrison Blueprint: Stables, Level 2
+        112003, -- Garrison Blueprint: Stables, Level 3
+        111982, -- Garrison Blueprint: Storehouse, Level 2
+        111983, -- Garrison Blueprint: Storehouse, Level 3
+        111816, -- Garrison Blueprint: Tailoring Emporium, Level 1
+        111992, -- Garrison Blueprint: Tailoring Emporium, Level 2
+        111993, -- Garrison Blueprint: Tailoring Emporium, Level 3
+        111813, -- Garrison Blueprint: The Forge, Level 1
+        111990, -- Garrison Blueprint: The Forge, Level 2
+        111991, -- Garrison Blueprint: The Forge, Level 3
+        111818, -- Garrison Blueprint: The Tannery, Level 1
+        111988, -- Garrison Blueprint: The Tannery, Level 2
+        111989, -- Garrison Blueprint: The Tannery, Level 3
+        111986, -- Garrison Blueprint: Trading Post, Level 2
+        111987, -- Garrison Blueprint: Trading Post, Level 3
+        116185, -- Garrison Blueprint: War Mill, Level 2
+        116186, -- Garrison Blueprint: War Mill, Level 3
+        127267, -- Ship Blueprint: Carrier
+        127268, -- Ship Blueprint: Transport
+        127269, -- Ship Blueprint: Battleship (horde)
+        127270, -- Ship Blueprint: Submarine
+        126900, -- Ship Blueprint: Destroyer
+        128492, -- Ship Blueprint: Battleship (alliance)
+        -- Blueprints dropped by rare mobs in Tanaan Jungle
+        126950, -- Equipment Blueprint: Bilge Pump
+        128258, -- Equipment Blueprint: Felsmoke Launchers
+        128232, -- Equipment Blueprint: High Intensity Fog Lights
+        128255, -- Equipment Blueprint: Ice Cutter
+        128231, -- Equipment Blueprint: Trained Shark Tank
+        128252, -- Equipment Blueprint: True Iron Rudder
+        128257, -- Equipment Blueprint: Ghostly Spyglass
+        -- Other blueprints
+        128256, -- Equipment Blueprint: Gyroscopic Internal Stabilizer
+        128250, -- Equipment Blueprint: Unsinkable
+        128251, -- Equipment Blueprint: Tuskarr Fishing Net
+        128260, -- Equipment Blueprint: Blast Furnace
+        128490, -- Blueprint: Oil Rig
+        128444} -- Blueprint: Oil Rig
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.GARRISON_ID][CONS.G_FOLLOWERS_ID] = {
+        -- Armor
+        120301, -- Armor Enhancement Token
+        114745, -- Braced Armor Enhancement
+        114808, -- Fortified Armor Enhancement
+        114822, -- Heavily Reinforced Armor Enhancement
+        114807, -- War Ravaged Armor Set
+        114806, -- Blackrock Armor Set
+        114746, -- Goredrenched Armor Set
+        -- Weapon
+        120302, -- Weapon Enhancement Token
+        114128, -- Balanced Weapon Enhancement
+        114129, -- Striking Weapon Enhancement
+        114131, -- Power Overrun Weapon Enhancement
+        114616, -- War Ravaged Weaponry
+        114081, -- Blackrock Weaponry
+        114622, -- Goredrenched Weaponry
+        -- Armor & Weapon 
+        120313, -- Sanketsu
+        128314, -- Frozen Arms of a Hero
+        -- Abilities & Traits
+        118354, -- Follower Re-training Certificate
+        122272, -- Follower Ability Retraining Manual
+        122273, -- Follower Trait Retraining Guide
+        123858, -- Follower Retraining Scroll Case
+        118475, -- Hearthstone Strategy Guide
+        118474, -- Supreme Manual of Dance
+        122584, -- Winning with Wildlings
+        122583, -- Grease Monkey Guide
+        122582, -- Guide to Arakkoa Relations
+        122580, -- Ogre Buddy Handbook
+        -- Other enhancements
+        120311, -- The Blademaster's Necklace
+        122298, -- Bodyguard Miniaturization Device
+        -- Contracts
+        116915, -- Inactive Apexis Guardian
+        114245, -- Abu'Gar's Favorite Lure
+        114243, -- Abu'Gar's Finest Reel
+        114242, -- Abu'Gar's Vitality
+        119161, -- Contract: Karg Bloodfury
+        119162, -- Contract: Cleric Maluuf
+        119165, -- Contract: Professor Felblast
+        119166, -- Contract: Cacklebone
+        119167, -- Contract: Vindicator Heluun
+        119248, -- Contract: Dawnseeker Rukaryx
+        119233, -- Contract: Kaz the Shrieker
+        119240, -- Contract: Lokra
+        119242, -- Contract: Magister Serena
+        119243, -- Contract: Magister Krelas
+        119244, -- Contract: Hulda Shadowblade
+        119245, -- Contract: Dark Ranger Velonara
+        119252, -- Contract: Rangari Erdanii
+        119253, -- Contract: Spirit of Bony Xuk
+        119254, -- Contract: Pitfighter Vaandaam
+        119255, -- Contract: Bruto
+        119256, -- Contract: Glirin
+        119257, -- Contract: Penny Clobberbottom
+        119267, -- Contract: Ziri'ak
+        119288, -- Contract: Daleera Moonfang
+        119291, -- Contract: Artificer Andren
+        119292, -- Contract: Vindicator Onaala
+        119296, -- Contract: Rangari Chel
+        119298, -- Contract: Ranger Kaalya
+        119418, -- Contract: Morketh Bladehowl
+        119420, -- Contract: Miall
+        122135, -- Contract: Greatmother Geyah
+        122136, -- Contract: Kal'gor the Honorable
+        122137, -- Contract: Bruma Swiftstone
+        122138, -- Contract: Ulna Thresher
+        112737, -- Contract: Ka'la of the Frostwolves
+        112848, -- Contract: Daleera Moonfang
+        114825, -- Contract: Ulna Thresher
+        114826, -- Contract: Bruma Swiftstone
+        119164, -- Contract: Arakkoa Outcasts Follower
+        119168, -- Contract: Vol'jin's Spear Follower
+        119169, -- Contract: Wrynn's Vanguard Follower
+        119821, -- Contract: Dawnseeker Rukaryx
+        128439, -- Contract: Pallas
+        128440, -- Contract: Dowser Goodwell
+        128441, -- Contract: Solar Priest Vayx
+        128445} -- Contract: Dowser Bigspark   
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.GARRISON_ID][CONS.G_IRONHORDE_ID] = {
+        113681, -- Iron Horde Scraps
+        113823, -- Crusted Iron Horde Pauldrons
+        113822, -- Ravaged Iron Horde Belt
+        113821} -- Battered Iron Horde Helmet
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.GARRISON_ID][CONS.G_MINING_ID] = {
+        118897, -- Miner's Coffee
+        118903} -- Preserved Mining Pick
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.GARRISON_ID][CONS.G_SHIPYARD_ID] = {
+        125787, -- Bilge Pump
+        127882, -- Blast Furnace
+        127884, -- Felsmoke Launcher
+        127895, -- Ghostly Spyglass
+        127881, -- Gyroscopic Internal Stabilizer
+        127662, -- High Intensity Fog Lights
+        127880, -- Ice Cutter
+        127663, -- Trained Shark Tank
+        127883, -- True Iron Rudder
+        127894, -- Tuskarr Fishing Net
+        127886, -- Unsinkable
+        126952, -- Ship: Destroyer
+        126983, -- Ship: Submarine
+        126986, -- Ship: Carrier
+        127134, -- Ship: Battleship
+        127135, -- Ship: Transport
+        128301, -- Ship: Submarine
+        128302, -- Ship: Battleship
+        128303, -- Ship: Destroyer
+        127833, -- Ship: Destroyer
+        128487, -- Ship: The Awakener
+        128488, -- Ship: The Awakener
+        128638, -- Ship: Destroyer
+        128639, -- Ship: Destroyer
+        128640, -- Ship: Destroyer
+        128641, -- Ship: Destroyer
+        128642, -- Ship: Transport
+        125786} -- Ship Deed: Carrier
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.GARRISON_ID][CONS.G_WORKORDERS_ID] = {
+        140590, -- Large Crate of Salvage
+        114119, -- Crate of Salvage
+        114116, -- Bag of Salvaged Goods
+        114120, -- Big Crate of Salvage
+        118473, -- Small Sack of Salvaged Goods
+        139593, -- Sack of Salvaged Goods
+        114781, -- Timber
+        116053, -- Draenic Seeds
+        115508, -- Draenic Stone
+        113991, -- Iron Trap
+        115009, -- Improved Iron Trap
+        115010, -- Deadly Iron Trap
+        119813, -- Furry Caged Beast
+        119814, -- Leathery Caged Beast
+        119810, -- Meaty Caged Beast
+        119819, -- Caged Mighty Clefthoof
+        119817, -- Caged Mighty Riverbeast
+        119815, -- Caged Mighty Wolf
+        117397, -- Nat's Lucky Coin
+        128373, -- Rush Order: Shipyard
+        122307, -- Rush Order: Barn
+        122487, -- Rush Order: Gladiator's Sanctum
+        122490, -- Rush Order: Dwarven Bunker
+        122491, -- Rush Order: War Mill
+        122496, -- Rush Order: Garden Shipment
+        122497, -- Rush Order: Garden Shipment
+        122500, -- Rush Order: Gnomish Gearworks
+        122501, -- Rush Order: Goblin Workshop
+        122502, -- Rush Order: Mine Shipment
+        122503, -- Rush Order: Mine Shipment
+        122576, -- Rush Order: Alchemy Lab
+        122590, -- Rush Order: Enchanter's Study
+        122591, -- Rush Order: Engineering Works
+        122592, -- Rush Order: Gem Boutique
+        122593, -- Rush Order: Scribe's Quarters
+        122594, -- Rush Order: Tailoring Emporium
+        122595, -- Rush Order: The Forge
+        122596} -- Rush Order: The Tannery
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.ASHRAN_ID] = {
+        114982, --  Song Flower
+        111842, --  Star Root Tuber
+        116410, --  Scroll of Speed
+        116411, --  Scroll of Protection
+        116412, --  Scroll of Mass Invisibility
+        116413, --  Scroll of Town Portal
+        117013, --  Wand of Lightning Shield
+        117014, --  Wand of Neutralization
+        117015, --  Wand of Mana Stealing
+        117016, --  Wand of Arcane Imprisonment
+        116999, --  Scroll of Replenishment
+        117381, --  Wand of Death
+        116984, --  Frost Wyrm Egg
+        118425, --  Nesingwary's Lost Horn
+        118426, --  Scroll of Invoke Yu'lon, the Jade Serpent
+        116925, --  Vintage Free Action Potion
+        114124, --  Phantom Potion
+        117017, --  Ghost Truffle
+        115793, --  S.O.S. Relief Flare
+        115500, --  Disposable Pocket Flying Machine
+        114126, --  Disposable Pocket Flying Machine
+        118109, --  Disposable Pocket Flying Machine
+        118110, --  Disposable Pocket Flying Machine
+        116397, --  Swift Riding Crop
+        116398, --  Flimsy X-Ray Goggles
+        114125, --  Preserved Discombobulator Ray
+        114629} --  Proximity Alarm-o-Bot 2000
+    DatabaseIDs[CONS.WARLORDS_OF_DRAENOR_ID][CONS.ASHRAN_ID][CONS.A_BOOKS_ID] = {
+        114846, -- Sigil of Dark Simulacrum
+        118760, -- Book of Rebirth
+        114842, -- Book of Flight Form
+        112154, -- Guide: Disengage
+        116983, -- Guide: Rogue Tracking
+        114845, -- Tome of Blink
+        114844, -- Scroll of Touch of Death
+        112005, -- The Jailer's Libram
+        111926, -- Codex of Ascension
+        114843, -- Handbook: Pick Pocket
+        116982, -- Handbook: Vanish
+        114847, -- Tablet of Ghost Wolf
+        114848, -- Grimoire Of Convert Demon
+        114849} -- Manual Of Spell Reflection
+
     DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.CONTAINERS_ID] = {
         88397, -- Grummlepack
         73241, -- Merchant's Satchel
@@ -11003,7 +11455,6 @@ do
         77532, -- Locksmith's Powderkeg
         87567, -- Food
         87568, -- Food
-        87215, -- Wormhole Generator: Pandaria
         90458, -- Lesser Charm of Good Fortune
         108438, -- Moonkin Hatchling
         79918, -- Quilen Statuette
@@ -11293,14 +11744,6 @@ do
         85589, -- Nearly Full Vial of Polyformic Acid
         85592, -- Half Full Vial of Polyformic Acid
         85593, -- Nearly Empty Vial of Polyformic Acid
-        89125, -- Sack of Pet Supplies
-        91086, -- Darkmoon Pet Supplies
-        93146, -- Pandaren Spirit Pet Supplies
-        93147, -- Pandaren Spirit Pet Supplies
-        93148, -- Pandaren Spirit Pet Supplies
-        93149, -- Pandaren Spirit Pet Supplies
-        94207, -- Fabled Pandaren Pet Supplies
-        98095, -- Brawler's Pet Supplies
         90918, -- Celebration Package
         98117, -- Moneybrau
         74812, -- Diluted Lime Sulfur
@@ -11544,7 +11987,6 @@ do
         102351, -- Drums of Rage
         82960, -- Ghostly Skeleton Key
         94604, -- Burning Seed
-        86143, -- Battle Pet Bandage
         85264, -- Autumn Blossom Tree
         85265, -- Spring Blossom Tree
         85266, -- Winter Blossom Tree
@@ -11552,10 +11994,6 @@ do
         85268, -- Spring Blossom Sapling
         85269, -- Winter Blossom Sapling
         89124, -- Celestial Offering
-        89906, -- Magical Mini-Treat
-        92742, -- Polished Battle-Stone
-        93724, -- Darkmoon Game Prize
-        98114, -- Pet Treat
         104287, -- Windfeather Plume
         104288, -- Condensed Jademist
         104289, -- Faintly-Glowing Herb
@@ -11603,23 +12041,11 @@ do
         88417, -- Gokk'lok's Shell
         89869, -- Pandaren Scarecrow
         90427, -- Pandaren Brewpack
-        92665, -- Flawless Elemental Battle-Stone
-        92675, -- Flawless Beast Battle-Stone
-        92676, -- Flawless Critter Battle-Stone
-        92677, -- Flawless Flying Battle-Stone
-        92678, -- Flawless Magic Battle-Stone
-        92679, -- Flawless Aquatic Battle-Stone
-        92680, -- Flawless Mechanical Battle-Stone
-        92681, -- Flawless Undead Battle-Stone
-        92682, -- Flawless Humanoid Battle-Stone
-        92683, -- Flawless Dragonkin Battle-Stone
-        92741, -- Flawless Battle-Stone
         94295, -- Primal Egg
         94296, -- Cracked Primal Egg
         97994, -- Darkmoon Seesaw
         98549, -- Iron Hitching Post (UNUSED)
         98552, -- Xan'tish's Flute
-        98715, -- Marked Flawless Battle-Stone
         101571, -- Moonfang Shroud
         105898, -- Moonfang's Paw
         90816, -- Relic of the Thunder King
@@ -12076,6 +12502,8 @@ do
         104324, -- Foot Ball
         93626, -- Stolen Present
         104318} -- Crashin' Thrashin' Flyer Controller
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_HOLIDAY_ID][CONS.MH_DARKMOON_ID] = {
+        93724} -- Darkmoon Game Prize
     DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_MOUNTS_ID] = {
         101675, -- Shimmering Moonstone
         89682, -- Oddly-Shaped Horn
@@ -12187,7 +12615,6 @@ do
         104011, -- Stormcrow
         107951} -- Iron Skyreaver
     DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID] = {
-        89139, -- Chain Pet Leash
         89640, -- Life Spirit
         89641, -- Water Spirit
         84105, -- Fishy
@@ -12312,16 +12739,72 @@ do
         106244, -- Murkalot's Flail
         106256, -- Treasure Goblin's Pack
         80008} -- Darkmoon Rabbit
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID][CONS.MC_BATTLE_STONE_ID] = {
+        92742, -- Polished Battle-Stone
+        98715, -- Marked Flawless Battle-Stone
+        92741, -- Flawless Battle-Stone
+        92679, -- Flawless Aquatic Battle-Stone
+        92675, -- Flawless Beast Battle-Stone
+        92676, -- Flawless Critter Battle-Stone
+        92683, -- Flawless Dragonkin Battle-Stone
+        92665, -- Flawless Elemental Battle-Stone
+        92677, -- Flawless Flying Battle-Stone
+        92682, -- Flawless Humanoid Battle-Stone
+        92681, -- Flawless Undead Battle-Stone
+        92678, -- Flawless Magic Battle-Stone
+        92680} -- Flawless Mechanical Battle-Stone
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID][CONS.MC_CONSUMABLE_ID] = {
+        86143, -- Battle Pet Bandage
+        98114, -- Pet Treat
+        89139, -- Chain Pet Leash
+        89906} -- Magical Mini-Treat
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID][CONS.MC_SUPPLIES_ID] = {
+        91086, -- Darkmoon Pet Supplies
+        89125, -- Sack of Pet Supplies
+        98095, -- Brawler's Pet Supplies
+        93146, -- Pandaren Spirit Pet Supplies
+        93147, -- Pandaren Spirit Pet Supplies
+        93148, -- Pandaren Spirit Pet Supplies
+        93149, -- Pandaren Spirit Pet Supplies
+        94207} -- Fabled Pandaren Pet Supplies
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_JEWELRY_ID] = {
+        103678, -- Time-Lost Artifact
+        95051, -- The Brassiest Knuckle (Bizmo's Brawlpub)
+        95050} -- The Brassiest Knuckle (Brawl'gar Arena)
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_QUEST_ID] = {
+        92510} -- Vol'jin's Hearthstone
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_TOYS_ID] = {
+        93672, -- Dark Portal
+        95567, -- Kirin Tor Beacon
+        95568, -- Sunreaver Beacon
+        87215} -- Wormhole Generator: Pandaria
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_CRATES_ID]= {
+        87533, -- Crate of Dwarven Archaeology Fragments
+        87534, -- Crate of Draenei Archaeology Fragments
+        87535, -- Crate of Fossil Archaeology Fragments
+        87536, -- Crate of Night Elf Archaeology Fragments
+        87537, -- Crate of Nerubian Archaeology Fragments
+        87538, -- Crate of Orc Archaeology Fragments
+        87539, -- Crate of Tol'vir Archaeology Fragments
+        87540, -- Crate of Troll Archaeology Fragments
+        87541} -- Crate of Vrykul Archaeology Fragments
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_ARTIFACT_ID] = {
+        87399} -- Restored Artifact
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_KEY_STONES_ID] = {
+        79869, -- Mogu Statue Piece
+        79868, -- Pandaren Pottery Shard
+        95373} -- Mantid Amber Sliver
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_OTHERS_ID] = {
+        87548, -- Lorewalker's Lodestone
+        87549, -- Lorewalker's Map
+        104198} -- Mantid Artifact Hunter's Kit
     DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.MISCELLANEOUS_ID][CONS.M_OTHER_ID] = {
-        87399, -- Restored Artifact
         87816, -- Tigersblood Tincture
         87821, -- Coagulated Tiger's Blood
         87828, -- Tigersblood Pigment
         88165, -- Vine-Cracked Junkbox
         94536, -- Intact Direhorn Hide
         95491, -- Tattered Historical Parchments
-        95567, -- Kirin Tor Beacon
-        95568, -- Sunreaver Beacon
         87391, -- Plundered Treasure
         72201, -- Plump Intestines
         87701, -- Sack of Raw Tiger Steaks
@@ -12350,7 +12833,6 @@ do
         87729, -- Sack of Golden Carp
         87730, -- Sack of Crocolisk Belly
         88496, -- Sealed Crate
-        89639, -- Desecrated Herb
         93198, -- Tome of the Tiger
         93199, -- Tome of the Crane
         93200, -- Tome of the Serpent
@@ -12390,15 +12872,6 @@ do
         85582, -- Shao-Tien Cage Key
         86067, -- Horde Missive
         86068, -- Alliance Missive
-        87533, -- Crate of Dwarven Archaeology Fragments
-        87534, -- Crate of Draenei Archaeology Fragments
-        87535, -- Crate of Fossil Archaeology Fragments
-        87536, -- Crate of Night Elf Archaeology Fragments
-        87537, -- Crate of Nerubian Archaeology Fragments
-        87538, -- Crate of Orc Archaeology Fragments
-        87539, -- Crate of Tol'vir Archaeology Fragments
-        87540, -- Crate of Troll Archaeology Fragments
-        87541, -- Crate of Vrykul Archaeology Fragments
         87779, -- Ancient Guo-Lai Cache Key
         87806, -- Ancient Mogu Key
         89155, -- Onyx Egg
@@ -12512,7 +12985,6 @@ do
         104034, -- Purse of Timeless Coins
         104035, -- Giant Purse of Timeless Coins
         104115, -- Mist-Filled Spirit Lantern
-        104198, -- Mantid Artifact Hunter's Kit
         104286, -- Quivering Firestorm Egg
         88567, -- Ghost Iron Lockbox
         104334, -- Misty Pi'jiu Brew
@@ -12535,8 +13007,6 @@ do
         85498, -- Songbell Seed Pack
         86595, -- Bag of Helpful Things
         87217, -- Small Bag of Goods
-        87548, -- Lorewalker's Lodestone
-        87549, -- Lorewalker's Map
         89365, -- Feverbite Egg Sack
         89373, -- Scotty's Lucky Coin
         89427, -- Ancient Mogu Treasure
@@ -12576,7 +13046,6 @@ do
         97268, -- Tome of Valor
         98133, -- Greater Cache of Treasures
         102467, -- Censer of Eternal Agony
-        93672, -- Dark Portal
         79264, -- Ruby Shard
         79265, -- Blue Feather
         79266, -- Jade Cat
@@ -13172,7 +13641,6 @@ do
         92496, -- Blade's Edge Fragment
         92497, -- Shadowmoon Fragment
         92499, -- Sturdy Needle
-        92510, -- Vol'jin's Hearthstone
         92539, -- Untamed Amber
         92557, -- The Metal Brew
         92558, -- Energized Seeds
@@ -13539,6 +14007,10 @@ do
         86380, -- Pattern: Imperial Silk Gloves
         86381, -- Pattern: Legacy of the Emperor
         86382} -- Pattern: Touch of the Light
+    table.insert(DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID],79255) -- Starlight Ink
+    table.insert(DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID],79254) -- Ink of Dreams
+    table.insert(DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID],79253) -- Misty Pigment
+    table.insert(DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID],79251) -- Shadow Pigment
     DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID][CONS.T_CLOTH_ID] = {
         82447, -- Imperial Silk
         92960, -- Silkworm Cocoon
@@ -13635,7 +14107,7 @@ do
         102538, -- Fresh Shao-Tien Rice
         102539, -- Fresh Strawberries
         74846} -- Witchberries
-    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_ANIMAL_ID] = {
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_ANIMAL_ID] = {
         85506, -- Viseclaw Meat
         74833, -- Raw Tiger Steak
         74834, -- Mushan Ribs
@@ -13643,9 +14115,9 @@ do
         74838, -- Raw Crab Meat
         74839, -- Wildfowl Breast
         75014} -- Raw Crocolisk Belly
-    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_EGG_ID] = {
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_EGG_ID] = {
         102537} -- Fresh Silkfeather Hawk Eggs
-    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_FISH_ID] = {
+    DatabaseIDs[CONS.MISTS_OF_PANDARIA_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_FISH_ID] = {
         74856, -- Jade Lungfish
         74857, -- Giant Mantis Shrimp
         74859, -- Emperor Salmon
@@ -13693,9 +14165,6 @@ do
         87685, -- Empty Krasarang Paddlefish Container
         87686, -- Empty Golden Carp Container
         87687, -- Empty Crocolisk Belly Container
-        79868, -- Pandaren Pottery Shard
-        79869, -- Mogu Statue Piece
-        95373, -- Mantid Amber Sliver
         78912, -- Silver Filigree Flask
         79318, -- Darkmoon Card of Mists
         80240, -- Strange Spherical Stone
@@ -13748,17 +14217,11 @@ do
         54444, -- Illusionary Bag
         69748, -- Tattered Hexcloth Bag
         54445, -- Otherworldly Bag
-        67390, -- "Carriage - Maddy" High Tech Bag
         60217, -- Elementium Toolbox
         70138, -- Luxurious Silk Gem Bag
-        67392, -- "Carriage - Exclusive" Gem Studded Clutch
-        67393, -- "Carriage - Going Green" Herb Tote Bag
         54446, -- Hyjal Expedition Bag
         70136, -- Royal Scribe's Satchel
-        67394, -- "Carriage - Xandera" Student's Satchel
-        67395, -- "Carriage - Meeya" Leather Bag
         70137, -- Triple-Reinforced Mining Bag
-        67396, -- "Carriage - Christina" Precious Metal Bag
         60218} -- Lure Master Tackle Box
     DatabaseIDs[CONS.CATACLYSM_ID][CONS.CONSUMABLES_ID][CONS.C_BANDAGES_ID] = {
         53051, -- Dense Embersilk Bandage
@@ -13986,7 +14449,6 @@ do
         64993, -- Hellscream's Reach Mana Potion
         64994, -- Hellscream's Reach Healing Potion
         57193, -- Mighty Rejuvenation Potion
-        58487, -- Potion of Deepholm
         57191, -- Mythical Healing Potion
         57192, -- Mythical Mana Potion
         63300, -- Rogue's Draught
@@ -14151,7 +14613,6 @@ do
         65660, -- Grand Vizier Ertan's Heart
         65734, -- Twilight Documents
         67413, -- War of the Satyr
-        68809, -- Veteran's Hearthstone
         69187, -- Murloc Female Mask
         69188, -- Murloc Male Mask
         69189, -- Naga Female Mask
@@ -14170,9 +14631,6 @@ do
         48601, -- Red Rider Air Rifle Ammo
         63359, -- Banner of Cooperation
         64400, -- Banner of Cooperation
-        71083, -- Darkmoon Game Token
-        71153, -- Magical Pet Biscuit
-        71970, -- Darkmoon Prize Ticket
         52304, -- Fire Prism
         63141, -- Tol Barad Searchlight
         63269, -- Loaded Gnomish Dice
@@ -14557,6 +15015,9 @@ do
         73792, -- Stolen Present
         46709, -- MiniZep Controller
         70722} -- Little Wickerman
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_HOLIDAY_ID][CONS.MH_DARKMOON_ID] = {
+        71083, -- Darkmoon Game Token
+        71634} -- Darkmoon Adventurer's Guide
     DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_REAGENTS_ID] = {
         64670} -- Vanishing Powder
     DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_MOUNTS_ID] = {
@@ -14694,6 +15155,36 @@ do
         78916, -- Soul of the Aspects
         79744, -- Eye of the Legion
         60847} -- Crawling Claw
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID][CONS.MC_CONSUMABLE_ID] = {
+        71153} -- Magical Pet Biscuit
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_HEARTSTONE_ID] = {
+        64457} -- The Last Relic of Argus
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_ARMOR_ID] = {
+        63379, -- Baradin's Wardens Tabard
+        63378, -- Hellscream's Reach Tabard
+        65274, -- Cloak of Coordination: Orgrimmar
+        65360, -- Cloak of Coordination: Stormwind
+        63353, -- Shroud of Cooperation: Orgrimmar
+        63352, -- Shroud of Cooperation: Stormwind
+        63207, -- Wrap of Unity: Orgrimmar
+        63206} -- Wrap of Unity: Stormwind
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_QUEST_ID] = {
+        68809, -- Veteran's Hearthstone
+        61379, -- Gidwin's Hearthstone
+        68808} -- Hero's Hearthstone
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_SCROLLS_ID] = {
+        58487} -- Potion of Deepholm
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_TOYS_ID] = {
+        64488} -- Innkeeper's Daughter
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_ARCHAEOLOGY_ID][CONS.MA_KEY_STONES_ID] = {
+        64397, -- Tol'vir Hieroglyphic
+        52843, -- Dwarf Rune Stone
+        63128, -- Troll Tablet
+        63127, -- Highborne Scroll
+        64394, -- Draenei Tome
+        64392, -- Orc Blood Text
+        64395, -- Vrykul Rune Stick
+        64396} -- Nerubian Obelisk
     DatabaseIDs[CONS.CATACLYSM_ID][CONS.MISCELLANEOUS_ID][CONS.M_OTHER_ID] = {
         67597, -- Sealed Crate
         78930, -- Sealed Crate
@@ -14739,7 +15230,6 @@ do
         71631, -- Zen'Vorka's Cache
         63518, -- Hellscream's Reach Commendation
         69886, -- Bag of Coins
-        64488, -- The Innkeeper's Daughter
         67250, -- Satchel of Helpful Goods
         68813, -- Satchel of Freshly-Picked Herbs
         71259, -- Leyara's Locket
@@ -14749,7 +15239,6 @@ do
         64373, -- Chalice of the Mountain Kings
         64383, -- Kaldorei Wind Chimes
         64456, -- Arrival of the Naaru
-        64457, -- The Last Relic of Argus
         66888, -- Stave of Fur and Claw
         67097, -- Grim Campfire
         68806, -- Kalytha's Haunted Locket
@@ -14776,7 +15265,9 @@ do
         64646, -- Bones of Transformation
         64651, -- Wisp Amulet
         64881, -- Pendant of the Scarab Storm
-        68136} -- Guild Vault Voucher (8th Slot)
+        68136, -- Guild Vault Voucher (8th Slot)
+        -- JUNK
+        69903} -- Satchel of Exotic Mysteries
     DatabaseIDs[CONS.CATACLYSM_ID][CONS.QUEST_ID] = {
         69854, -- Smoke-Stained Locket
         69855, -- Smoke-Stained Locket
@@ -16253,6 +16744,9 @@ do
         72002, -- Pattern: Lavaquake Legwraps
         72003, -- Pattern: Dreamwraps of the Light
         72004} -- Pattern: Bracers of Unconquered Power
+    table.insert(DatabaseIDs[CONS.CATACLYSM_ID][CONS.TRADE_GOODS_ID],61981) -- Inferno Ink
+    table.insert(DatabaseIDs[CONS.CATACLYSM_ID][CONS.TRADE_GOODS_ID],61978) -- Blackfallow Ink
+    table.insert(DatabaseIDs[CONS.CATACLYSM_ID][CONS.TRADE_GOODS_ID],61979) -- Ashen Pigment
     DatabaseIDs[CONS.CATACLYSM_ID][CONS.TRADE_GOODS_ID][CONS.T_CLOTH_ID] = {
         54440, -- Dreamcloth
         53010, -- Embersilk Cloth
@@ -16326,7 +16820,7 @@ do
     DatabaseIDs[CONS.CATACLYSM_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID] = {
         62779, -- Monstrous Claw
         62780} -- Snake Eye
-    DatabaseIDs[CONS.CATACLYSM_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_ANIMAL_ID] = {
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_ANIMAL_ID] = {
         62781, -- Giant Turtle Tongue
         62782, -- Dragon Flank
         62783, -- Basilisk "Liver"
@@ -16334,7 +16828,7 @@ do
         62785, -- Delicate Wing
         62791, -- Blood Shrimp
         67229} -- Stag Flank
-    DatabaseIDs[CONS.CATACLYSM_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_FISH_ID] = {
+    DatabaseIDs[CONS.CATACLYSM_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_FISH_ID] = {
         53068, -- Lavascale Catfish
         53062, -- Sharptooth
         53064, -- Highland Guppy
@@ -16419,15 +16913,7 @@ do
         62574, -- Fortune Card
         62575, -- Fortune Card
         62576, -- Fortune Card
-        64397, -- Tol'vir Hieroglyphic
-        64395, -- Vrykul Rune Stick
-        64396, -- Nerubian Obelisk
-        64392, -- Orc Blood Text
-        64394, -- Draenei Tome
         60842, -- Fortune Card
-        52843, -- Dwarf Rune Stone
-        63127, -- Highborne Scroll
-        63128, -- Troll Tablet
         52197, -- Figurine - Demon Panther
         65894, -- Figurine - Dream Owl
         65895, -- Figurine - King of Boars
@@ -16454,7 +16940,6 @@ do
         50317, -- Papa's New Bag
         51809, -- Portable Hole
         49295, -- Enlarged Onyxia Hide
-        67389, -- "Carriage - Exclusive" Enchanting Evening Purse
         41598, -- Mysterious Bag
         45773, -- Emerald Bag
         44446, -- Pack of Endless Pockets
@@ -16491,7 +16976,6 @@ do
         44561, -- Pattern: Fur Lining - Shadow Resist
         44562, -- Pattern: Fur Lining - Nature Resist
         44563, -- Pattern: Fur Lining - Arcane Resist
-        48933, -- Wormhole Generator: Northrend
         46349, -- Chef's Hat
         49040} -- Jeeves
     DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.CONSUMABLES_ID][CONS.C_ELIXIRS_ID] = {
@@ -16950,9 +17434,6 @@ do
         43854, -- Cobalt Skeleton Key
         44625, -- Bottle of Aged Dalaran Red
         44626, -- Cask of Aged Dalaran Red
-        37431, -- Fetch Ball
-        43352, -- Pet Grooming Kit
-        43626, -- Happy Pet Snack
         43950, -- Kirin Tor Commendation Badge
         44435, -- Windle's Lighter
         44710, -- Wyrmrest Commendation Badge
@@ -17440,8 +17921,6 @@ do
         54811, -- Celestial Steed
         49177} -- Tome of Cold Weather Flight
     DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID] = {
-        37460, -- Rope Pet Leash
-        44820, -- Red Ribbon Pet Leash
         39896, -- Tickbird Hatchling
         39898, -- Cobra Hatchling
         39899, -- White Tickbird Hatchling
@@ -17505,6 +17984,35 @@ do
         54847, -- Lil' XT
         56806, -- Mini Thor
         49287} -- Tuskarr Kite
+    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.MISCELLANEOUS_ID][CONS.M_COMPANIONS_ID][CONS.MC_CONSUMABLE_ID] = {
+        43626, -- Happy Pet Snack
+        43352, -- Pet Grooming Kit
+        37431, -- Fetch Ball
+        37460, -- Rope Pet Leash
+        44820} -- Red Ribbon Pet Leash
+    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_HEARTSTONE_ID] = {
+        52251} -- Jaina's Locket
+    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_ARMOR_ID] = {
+        46874, -- Argent Crusader's Tabard
+        50287} -- Boots of the Bay
+    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_JEWELRY_ID] = {
+        40586, -- Band of the Kirin Tor
+        48956, -- Etched Ring of the Kirin Tor
+        45690, -- Inscribed Ring of the Kirin Tor
+        44935, -- Ring of the Kirin Tor
+        51559, -- Runed Ring of the Kirin Tor
+        51557, -- Runed Signet of the Kirin Tor
+        45691, -- Inscribed Signet of the Kirin Tor
+        40585, -- Signet of the Kirin Tor
+        48957, -- Etched Signet of the Kirin Tor
+        44934, -- Loop of the Kirin Tor
+        51558, -- Runed Loop of the Kirin Tor
+        45689, -- Inscribed Loop of the Kirin Tor
+        48955} -- Etched Loop of the Kirin Tor
+    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_TOYS_ID] = {
+        54452, -- Ethereal Portal
+        43824, -- The Schools of Arcane Magic - Mastery
+        48933} -- Wormhole Generator: Northrend
     DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.MISCELLANEOUS_ID][CONS.M_OTHER_ID] = {
         46007, -- Bag of Fishing Treasures
         43575, -- Reinforced Junkbox
@@ -17544,13 +18052,11 @@ do
         43622, -- Froststeel Lockbox
         37888, -- Arcane Disruptor
         52676, -- Cache of the Ley-Guardian
-        43824, -- The Schools of Arcane Magic - Mastery
         45984, -- Unusual Compass
         45986, -- Tiny Titanium Lockbox
         46110, -- Alchemist's Cache
         54536, -- Satchel of Chilled Goods
         43624, -- Titanium Lockbox
-        54452, -- Ethereal Portal
         52005, -- Satchel of Helpful Goods
         52004, -- Satchel of Helpful Goods
         52003, -- Satchel of Helpful Goods
@@ -17561,7 +18067,6 @@ do
         44430, -- Titanium Seal of Dalaran
         51999, -- Satchel of Helpful Goods
         52201, -- Muradin's Favor
-        52251, -- Jaina's Locket
         52253, -- Sylvanas' Music Box
         49703, -- Perpetual Purple Firework
         37254, -- Super Simian Sphere
@@ -19051,6 +19556,36 @@ do
         49954, -- Pattern: Deathfrost Boots
         49955, -- Pattern: Lightweave Leggings
         49956} -- Pattern: Sandals of Consecration
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43127) -- Snowfall Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43126) -- Ink of the Sea
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43125) -- Darkflame Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43124) -- Ethereal Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43123) -- Ink of the Sky
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43122) -- Shimmering Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43121) -- Fiery Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43120) -- Celestial Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43119) -- Royal Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43118) -- Jadefire Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43117) -- Dawnstar Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43116) -- Lion's Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43115) -- Hunter's Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39774) -- Midnight Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39469) -- Moonglow Ink
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43109) -- Icy Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43108) -- Ebon Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39343) -- Azure Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43107) -- Sapphire Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39342) -- Nether Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43106) -- Ruby Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39341) -- Silvery Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43105) -- Indigo Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39340) -- Violet Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43104) -- Burnt Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39339) -- Emerald Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],43103) -- Verdant Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39338) -- Golden Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39334) -- Dusky Pigment
+    table.insert(DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID],39151) -- Alabaster Pigment
     DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_CLOTH_ID] = {
         41593, -- Ebonweave
         41594, -- Moonshroud
@@ -19074,6 +19609,7 @@ do
         37704, -- Crystallized Life
         37705} -- Crystallized Water
     DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_ENCHANTING_ID] = {
+        38682, -- Enchanting Vellum
         44452, -- Runed Titanium Rod
         34057, -- Abyss Crystal
         34052, -- Dream Shard
@@ -19093,7 +19629,7 @@ do
         39684, -- Hair Trigger
         39682, -- Overcharged Capacitor
         39683} -- Froststeel Tube
-    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.CT_FISHING_ID] = {
+    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_FISHING_ID] = {
         43571, -- Sewer Carp
         43572, -- Magic Eater
         43647, -- Shimmering Minnow
@@ -19154,7 +19690,7 @@ do
         33568, -- Borean Leather
         38558, -- Nerubian Chitin
         112177} -- Nerubian Chitin Fragment
-    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_ANIMAL_ID] = {
+    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_ANIMAL_ID] = {
         36782, -- Succulent Clam Meat
         34736, -- Chunk o' Mammoth
         43009, -- Shoveltusk Flank
@@ -19162,9 +19698,9 @@ do
         43011, -- Worg Haunch
         43013, -- Chilled Meat
         44834} -- Wild Turkey
-    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_EGG_ID] = {
+    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_EGG_ID] = {
         43501} -- Northern Egg
-    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_FISH_ID] = {
+    DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_FISH_ID] = {
         41808, -- Bonescale Snapper 
         41800, -- Deep Sea Monsterbelly
         41802, -- Imperial Manta Ray
@@ -19191,7 +19727,6 @@ do
         108305, -- Cobalt Ore Nugget
         36916} -- Cobalt Bar
     DatabaseIDs[CONS.WRATH_OF_THE_LICH_KING_ID][CONS.TRADE_GOODS_ID][CONS.T_OTHER_ID] = {
-        38682, -- Enchanting Vellum
         43007, -- Northern Spices
         45909, -- Giant Darkwater Clam
         36781, -- Darkwater Clam
@@ -19218,9 +19753,6 @@ do
 
     DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.CONTAINERS_ID] = {
         30745, -- Heavy Toolbox
-        30746, -- Mining Sack
-        30747, -- Gem Pouch
-        30748, -- Enchanter's Satchel
         23389, -- Empty Draenei Supply Pouch
         22571, -- Courier's Bag
         22976, -- Magister's Pouch
@@ -19239,7 +19771,6 @@ do
         38082, -- "Gigantique" Bag
         30748, -- Enchanter's Satchel
         21858, -- Spellfire Bag
-        30745, -- Heavy Toolbox
         23774, -- Fel Iron Toolbox
         23775, -- Titanium Toolbox
         24270, -- Bag of Jewels
@@ -19658,7 +20189,6 @@ do
         29699, -- Socrethar's Teleportation Stone
         29735, -- Holy Dust
         29736, -- Arcane Rune
-        29796, -- Socrethar's Teleportation Stone
         29905, -- Kael's Vial Remnant
         29906, -- Vashj's Vial Remnant
         30260, -- Voren'thal's Package
@@ -19735,10 +20265,11 @@ do
         33928, -- Hollowed Bone Decanter
         34686, -- Brazier of Dancing Flames
         35223, -- Papa Hummel's Old-Fashioned Pet Biscuit
-        37863, -- Direbrew's Remote
         38291, -- Ethereal Mutagen
         38300} -- Diluted Ethereum Essence
-    print(DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.GEMS_ID][CONS.G_RELIC_ID])
+    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.CURRENCY_ID] = {
+        26044, -- Halaa Research Token
+        26045} -- Halaa Battle Token
     DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.GEMS_ID] = {
         28458, -- Bold Tourmaline
         28459, -- Delicate Tourmaline
@@ -20111,6 +20642,15 @@ do
         23713, -- Hippogryph Hatchling
         34493, -- Dragon Kite
         35227} -- Goblin Weather Machine - Prototype 01-B
+    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_HEARTSTONE_ID] = {
+        37863, -- Direbrew's Remote
+        29796} -- Socrethar's Teleportation Stone
+    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_ARMOR_ID] = {
+        28585} -- Ruby Slippers
+    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_JEWELRY_ID] = {
+        32757} -- Blessed Medallion of Karabor
+    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_SCROLLS_ID] = {
+        35230} -- Darnarian's Scroll of Teleportation
     DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.MISCELLANEOUS_ID][CONS.M_OTHER_ID] = {
         32835, -- Ogri'la Care Package
         34863, -- Bag of Fishing Treasures
@@ -20183,8 +20723,6 @@ do
         37148, -- Loose Singed Page
         32897, -- Mark of the Illidari
         31952, -- Khorium Lockbox
-        26044, -- Halaa Research Token
-        26045, -- Halaa Battle Token
         29750, -- Ethereum Stasis Chamber Key
         32064, -- Protectorate Treasure Cache
         32079, -- Shaffar's Stasis Chamber Key
@@ -21154,7 +21692,6 @@ do
         34862, -- Practice Torches
         34953, -- Earthen Ring Magma Totem
         35229, -- Nether Residue
-        35230, -- Darnarian's Scroll of Teleportation
         35231, -- Sunfury Attack Plans
         35233, -- Multiphase Spectrographic Goggles
         35277, -- Twilight Correspondence
@@ -21919,7 +22456,7 @@ do
         23781, -- Elemental Blasting Powder
         23782, -- Fel Iron Casing
         23783} -- Handful of Fel Iron Bolts
-    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.TRADE_GOODS_ID][CONS.CT_FISHING_ID] = {
+    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.TRADE_GOODS_ID][CONS.T_FISHING_ID] = {
         35285} -- Giant Sunfish   
     DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.TRADE_GOODS_ID][CONS.T_HERBS_ID] = {
         22794, -- Fel Lotus
@@ -21989,7 +22526,7 @@ do
         112185, -- Wind Scale Fragment
         29548, -- Nether Dragonscales
         112183} -- Nether Dragonscale Fragment
-    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_ANIMAL_ID] = {
+    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_ANIMAL_ID] = {
         24477, -- Jaggal Clam Meat
         27681, -- Warped Flesh
         27674, -- Ravager Flesh
@@ -22001,7 +22538,7 @@ do
         31671, -- Serpent Flesh 
         35562, -- Bear Flank
         27669} -- Bat Flesh
-    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_FISH_ID] = {
+    DatabaseIDs[CONS.THE_BURNING_CRUSADE_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_FISH_ID] = {
         33823, -- Bloodfin Catfish
         33824, -- Crescent-Tail Skullfish
         27422, -- Barbed Gill Trout
@@ -22756,6 +23293,7 @@ do
         13307, -- Fras Siabi's Postbox Key
         18268} -- Gordok Inner Door Key
     DatabaseIDs[CONS.CLASSIC_ID][CONS.MISCELLANEOUS_ID][CONS.M_HOLIDAY_ID] = {
+        21100, -- Coin of Ancestry
         17405, -- Green Garden Tea
         18597, -- Orcish Orphan Whistle
         18598, -- Human Orphan Whistle
@@ -22927,6 +23465,26 @@ do
         20371, -- Blue Murloc Egg
         23083, -- Captured Flame
         8494} -- Parrot Cage (Hyacinth Macaw)
+    DatabaseIDs[CONS.CLASSIC_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_HEARTSTONE_ID] = {
+        6948} -- Hearthstone
+    DatabaseIDs[CONS.CLASSIC_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_ARMOR_ID] = {
+        22632, -- Atiesh, Greatstaff of the Guardian (Druid)
+        22589, -- Atiesh, Greatstaff of the Guardian (Mage)
+        22631, -- Atiesh, Greatstaff of the Guardian (Priest)
+        22630} -- Atiesh, Greatstaff of the Guardian (Warlock)
+    DatabaseIDs[CONS.CLASSIC_ID][CONS.MISCELLANEOUS_ID][CONS.M_TELEPORT_ID][CONS.MT_JEWELRY_ID] = {
+        17690, -- Frostwolf Insignia Rank 1
+        17905, -- Frostwolf Insignia Rank 2
+        17906, -- Frostwolf Insignia Rank 3
+        17907, -- Frostwolf Insignia Rank 4
+        17908, -- Frostwolf Insignia Rank 5
+        17909, -- Frostwolf Insignia Rank 6
+        17691, -- Stormpike Insignia Rank 1
+        17900, -- Stormpike Insignia Rank 2
+        17901, -- Stormpike Insignia Rank 3
+        17902, -- Stormpike Insignia Rank 4
+        17903, -- Stormpike Insignia Rank 5
+        17904} -- Stormpike Insignia Rank 6
     DatabaseIDs[CONS.CLASSIC_ID][CONS.MISCELLANEOUS_ID][CONS.M_OTHER_ID] = {
         12033, -- Thaurissan Family Jewels
         13891, -- Bloated Salmon
@@ -22978,7 +23536,6 @@ do
         5373, -- Lucky Charm
         5863, -- Guild Charter
         6307, -- Message in a Bottle
-        6948, -- Hearthstone
         8383, -- Plain Letter
         9279, -- White Punch Card
         9280, -- Yellow Punch Card
@@ -23063,7 +23620,10 @@ do
         17965, -- Yellow Sack of Gems
         17969, -- Red Sack of Gems
         1973, -- Orb of Deception
-        13379} -- Piccolo of the Flaming Fire
+        13379, -- Piccolo of the Flaming Fire
+        -- JUNK
+        18229, -- Nat Pagle's Guide to Extreme Anglin'
+        18365} -- A Thoroughly Read Copy of "Nat Pagle's Guide to Extreme Anglin'."
     DatabaseIDs[CONS.CLASSIC_ID][CONS.QUEST_ID] = {
         11885, -- Shadowforge Torch
         21229, -- Qiraji Lord's Insignia
@@ -24786,6 +25346,7 @@ do
         14511, -- Pattern: Gloves of Spell Mastery
         14512, -- Pattern: Truefaith Vestments
         14513} -- Pattern: Robe of the Archmage
+    table.insert(DatabaseIDs[CONS.CLASSIC_ID][CONS.TRADE_GOODS_ID],10647) -- Engineer's Ink
     DatabaseIDs[CONS.CLASSIC_ID][CONS.TRADE_GOODS_ID][CONS.T_CLOTH_ID] = {
         14048, -- Bolt of Runecloth
         14342, -- Mooncloth
@@ -25002,12 +25563,14 @@ do
         7286, -- Black Whelp Scale
         7392, -- Green Whelp Scale
         5116, -- Long Tail Feather
+        17056, -- Light Feather
         15409} -- Refined Deeprock Salt
     DatabaseIDs[CONS.CLASSIC_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID] = {
         3404, -- Buzzard Wing
         2251, -- Gooey Spider Leg
         5470} -- Thunder Lizard Tail
-    DatabaseIDs[CONS.CLASSIC_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_ANIMAL_ID] = {
+    DatabaseIDs[CONS.CLASSIC_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_ANIMAL_ID] = {
+        2674, -- Crawler Meat
         21024, -- Chimaerok Tenderloin
         20424, -- Sandworm Meat
         7974, -- Zesty Clam Meat
@@ -25032,11 +25595,29 @@ do
         5503, -- Clam Meat
         723, -- Goretusk Liver
         2673, -- Coyote Meat
+        8959, -- Raw Spinefin Halibut
+        13888, -- Darkclaw Lobster
+        13889, -- Raw Whitescale Salmon
+        4603, -- Raw Spotted Yellowtail
+        1015, -- Lean Wolf Flank
+        1468, -- Murloc Fin
+        2924, -- Crocolisk Meat
+        2675, -- Crawler Claw
+        3173, -- Bear Meat
+        5469, -- Strider Meat
+        5466, -- Scorpid Stinger
+        769, -- Chunk of Boar Meat
+        2672, -- Stringy Wolf Meat
+        2886, -- Crag Boar Rib
+        5465, -- Small Spider Leg
+        12223, -- Meaty Bat Wing
+        2665, -- Stormwind Seasoning Herbs
         5467} -- Kodo Meat
-    DatabaseIDs[CONS.CLASSIC_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_EGG_ID] = {
+    DatabaseIDs[CONS.CLASSIC_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_EGG_ID] = {
         12207, -- Giant Egg
+        6889, -- Small Egg
         3685} -- Raptor Egg
-    DatabaseIDs[CONS.CLASSIC_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.CT_FISH_ID] = {
+    DatabaseIDs[CONS.CLASSIC_ID][CONS.TRADE_GOODS_ID][CONS.T_MEAT_ID][CONS.TM_FISH_ID] = {
         13888, -- Darkclaw Lobster
         13889, -- Raw Whitescale Salmon
         13754, -- Raw Glossy Mightfish
@@ -25153,12 +25734,15 @@ do
 end
 
 local function ItemsIDs_Init(filter, flagsSplit, flagForces)
-    print("-------------------- PROCESSANDO --------------------")
+    if filter.db.profile.flagDebug['DEBUG_CLASSIFICATION'] then print("---------- INICIALIZANDO A CLASSIFICAÇÃO DOS ITENS ----------") end
     local result = {}
 
     local function AddToSet(set, list, label)
         if list then
             for _, v in ipairs(list) do
+                if set[v] then
+                    if filter.db.profile.flagDebug['DEBUG_CLASSIFICATION'] then printprint("O item de id \'" .. v .. "\' esta sendo mudado de \'" .. set[v] .. "\' para \'" .. label .. "\'") end
+                end
                 set[v] = label
             end
         end
@@ -25174,7 +25758,7 @@ local function ItemsIDs_Init(filter, flagsSplit, flagForces)
         end
     end
 
-    for numero, expansao in ipairs(EXPANSIONS_LIST) do
+    for numero, expansao in ipairs(RULES.EXPANSIONS_LIST) do
 
         local organizarPorExpansao = false
         local organizarPorExpansaoForcada = false
@@ -25193,7 +25777,7 @@ local function ItemsIDs_Init(filter, flagsSplit, flagForces)
             end
         end
 
-        local categoriasDaExpansao = getAddedArray(CATEGORY_LIST, EXPANSION_SPECIFIC_SUBCATEGORY[expansao])
+        local categoriasDaExpansao = getAddedArray(RULES.CATEGORY_LIST, RULES.EXPANSION_SPECIFIC_SUBCATEGORY[expansao])
         for numbero_categoria, categoria in ipairs(categoriasDaExpansao) do
 
             local IDCategoria = nil
@@ -25218,11 +25802,11 @@ local function ItemsIDs_Init(filter, flagsSplit, flagForces)
             if IDCategoriaComExpansao then
                 AddToExpansion(DatabaseIDs[expansao][categoria], expansao)
             end
-            --print("Expansão: " .. Label_Text[expansao] .. ", categoria: " .. Label_Text[categoria] .. ", adicionada em: " .. Label_Text[IDCategoria])
+            if filter.db.profile.flagDebug['DEBUG_CLASSIFICATION'] then print("Expansão: \'" .. Label_Text[expansao] .. "\', categoria: \'" .. Label_Text[categoria] .. "\', adicionada em: \'" .. Label_Text[IDCategoria] .. "\'") end
             AddToSet(result, DatabaseIDs[expansao][categoria], IDCategoria)
 
-            if CATEGORY_HAS_SUBCATEGORY[categoria] then
-                for numero_subcategoria, subcategoria in ipairs(CATEGORY_HAS_SUBCATEGORY[categoria]) do
+            if RULES.CATEGORY_HAS_SUBCATEGORY[categoria] then
+                for numero_subcategoria, subcategoria in ipairs(RULES.CATEGORY_HAS_SUBCATEGORY[categoria]) do
 
                     local IDSubCategoria = nil
                     local IDSubCategoriaComExpansao = false
@@ -25256,11 +25840,12 @@ local function ItemsIDs_Init(filter, flagsSplit, flagForces)
                     if IDSubCategoriaComExpansao then
                         AddToExpansion(DatabaseIDs[expansao][categoria][subcategoria], expansao)
                     end
-                    --print("Expansão: " .. Label_Text[expansao] .. ", categoria: " .. Label_Text[subcategoria] .. ", adicionada em: " .. Label_Text[IDSubCategoria])
+                    if filter.db.profile.flagDebug['DEBUG_CLASSIFICATION'] then print("Expansão: \'" .. Label_Text[expansao] .. "\', categoria: \'" .. Label_Text[subcategoria] .. "\', adicionada em: \'" .. Label_Text[IDSubCategoria] .. "\'") end
+                    
                     AddToSet(result, DatabaseIDs[expansao][categoria][subcategoria], IDSubCategoria)
 
-                    if CATEGORY_HAS_SUBCATEGORY[subcategoria] then
-                        for numero_divisao_subcategoria, divisao_subcategoria in ipairs(CATEGORY_HAS_SUBCATEGORY[subcategoria]) do
+                    if RULES.CATEGORY_HAS_SUBCATEGORY[subcategoria] then
+                        for numero_divisao_subcategoria, divisao_subcategoria in ipairs(RULES.CATEGORY_HAS_SUBCATEGORY[subcategoria]) do
 
                             local IDDivisaoSubCategoria = nil
                             local IDDivisaoSubCategoriaComExpansao = false
@@ -25304,7 +25889,7 @@ local function ItemsIDs_Init(filter, flagsSplit, flagForces)
                             if IDDivisaoSubCategoriaComExpansao then
                                 AddToExpansion(DatabaseIDs[expansao][categoria][subcategoria], expansao)
                             end
-                            --print("Expansão: " .. Label_Text[expansao] .. ", categoria: " .. Label_Text[divisao_subcategoria] .. ", adicionada em: " .. Label_Text[IDDivisaoSubCategoria])
+                            if filter.db.profile.flagDebug['DEBUG_CLASSIFICATION'] then print("Expansão: \'" .. Label_Text[expansao] .. "\', categoria: \'" .. Label_Text[divisao_subcategoria] .. "\', adicionada em: \'" .. Label_Text[IDDivisaoSubCategoria] .. "\'") end
                             AddToSet(result, DatabaseIDs[expansao][categoria][subcategoria][divisao_subcategoria], IDDivisaoSubCategoria)
                         end
                     end
@@ -25312,10 +25897,10 @@ local function ItemsIDs_Init(filter, flagsSplit, flagForces)
             end
         end
     end
-    for number_expansion_idependent, expansion_idependent in ipairs(EXPANSION_IDEPENDENDT_CATEGORY_LIST) do
+    for number_expansion_idependent, expansion_idependent in ipairs(RULES.EXPANSION_IDEPENDENDT_CATEGORY_LIST) do
         AddToSet(result, DatabaseIDs[expansion_idependent], expansion_idependent)
-        if CATEGORY_HAS_SUBCATEGORY[expansion_idependent] then
-            for number_category, category in ipairs(CATEGORY_HAS_SUBCATEGORY[expansion_idependent]) do
+        if RULES.CATEGORY_HAS_SUBCATEGORY[expansion_idependent] then
+            for number_category, category in ipairs(RULES.CATEGORY_HAS_SUBCATEGORY[expansion_idependent]) do
                 if flagsSplit[expansion_idependent] and flagsSplit[expansion_idependent][category] then
                     AddToSet(result, DatabaseIDs[expansion_idependent][category], category)
                 else
@@ -25327,7 +25912,7 @@ local function ItemsIDs_Init(filter, flagsSplit, flagForces)
     return result
 end
 
-local generalFilter = AdiBags:RegisterFilter(FILTER_NAME, 95)
+local generalFilter = AdiBags:RegisterFilter(FILTER_NAME, 92)
 generalFilter.uiName = FILTER_NAME
 generalFilter.uiDesc = FILTER_DESCRIPTIONS
 
@@ -25335,39 +25920,61 @@ function generalFilter:OnInitialize()
     self.db = AdiBags.db:RegisterNamespace(FILTER_NAME, {
         profile = {
             flagExpansionPrefix = false,
-            flagForceOrganizeByExpansion = true,
-            flagOrganizeByExpansion = {true},
-            flagForceOldExpansions = true,
-            flagOldExpansions = {true},
 
-            flagItemsSplit = {true},
-            flagConsumablesSplit = {true},
-            flagGemsSplit = {true},
-            flagMiscellaneousSplit = {true},
-            flagRecipesSplit = {true},
-            flagTradeGoodsSplit = {true},
-            flagCookingSplit = {true},
-            flagPetSplit = {true},
-            flagForceSubcategories = {true},
-            flagGarrisonSplit = {true},
-            flagAshranSplit = {true},
+            flagForceOrganizeByExpansion = false,
+            flagOrganizeByExpansion = {false},
+
+            flagForceOldExpansions = false,
+            flagOldExpansions = {
+                [CONS.CLASSIC_ID] = true,
+                [CONS.THE_BURNING_CRUSADE_ID] = true,
+                [CONS.WRATH_OF_THE_LICH_KING_ID] = true,
+                [CONS.CATACLYSM_ID] = true,
+                [CONS.MISTS_OF_PANDARIA_ID] = true,
+                [CONS.WARLORDS_OF_DRAENOR_ID] = true},
+
+            flagForceSubcategories = {
+                [CONS.CURRENCY_ID] = true,
+                [CONS.ORDER_HALL_ID] = true,
+                [CONS.GARRISON_ID] = true,
+                [CONS.ASHRAN_ID] = true,
+                [CONS.M_COMPANIONS_ID] = true,
+                [CONS.M_TELEPORT_ID] = true,
+                [CONS.M_ARCHAEOLOGY_ID] = true,
+                [CONS.T_FISHING_ID] = true,
+                [CONS.MH_DARKMOON_ID] = true},
+
+            flagItemsSplit = {false},
+            flagConsumablesSplit = {false},
+            flagGemsSplit = {false},
+            flagMiscellaneousSplit = {false},
+            flagRecipesSplit = {false},
+            flagTradeGoodsSplit = {false},
+            flagCookingSplit = {false},
+            flagPetSplit = {false},
+            flagGarrisonSplit = {false},
+            flagAshranSplit = {false},
+
+            flagDebug = {false},
         },
         char = {},
     })
 end
 
 function generalFilter:Update()
-  ItemsIDs = nil
-  ItemsExpansionIDs = {}
-  self:SendMessage('AdiBags_FiltersChanged')
+    ItemsIDs = nil
+    ItemsExpansionIDs = {}
+    self:SendMessage('AdiBags_FiltersChanged')
 end
 
 function generalFilter:OnEnable()
-  AdiBags:UpdateFilters()
+    inicializarDatabase(self)
+    inicializarDatabaseID(self)
+    AdiBags:UpdateFilters()
 end
 
 function generalFilter:OnDisable()
-  AdiBags:UpdateFilters()
+    AdiBags:UpdateFilters()
 end
 
 function generalFilter:Filter(slotData)
@@ -25381,42 +25988,50 @@ function generalFilter:Filter(slotData)
             [CONS.TRADE_GOODS_ID] = self.db.profile.flagTradeGoodsSplit,
             [CONS.T_MEAT_ID] = self.db.profile.flagCookingSplit,
             [CONS.M_COMPANIONS_ID] = self.db.profile.flagPetSplit,
-            -- [GARRISON_ID] = self.db.profile.flagGarrisonSplit,
-            -- [ASHRAN_ID] = self.db.profile.flagAshranSplit,
+            [CONS.ORDER_HALL_ID] = self.db.profile.flagOrderHallSplit,
+            [CONS.GARRISON_ID] = self.db.profile.flagGarrisonSplit,
+            [CONS.ASHRAN_ID] = self.db.profile.flagAshranSplit,
         }, self.db.profile.flagForceSubcategories
     )
 
     if ItemsIDs[slotData.itemId] then
-        -- print(slotData.name)
         if self.db.profile.flagExpansionPrefix and Label_Expansions_Text[ItemsExpansionIDs[slotData.itemId]] then
-            -- print("nome: " .. Label_Expansions_Text[ItemsExpansionIDs[slotData.itemId]]  .. ": " .. Label_Text[ItemsIDs[slotData.itemId]])
+            if self.db.profile.flagDebug['DEBUG_FILTER'] then print("Item de nome \'" .. slotData.name .. "\' classificado como: \'" .. Label_Expansions_Text[ItemsExpansionIDs[slotData.itemId]]  .. ": " .. Label_Text[ItemsIDs[slotData.itemId]] .. "\'") end
             return Label_Expansions_Text[ItemsExpansionIDs[slotData.itemId]]  .. ": " .. Label_Text[ItemsIDs[slotData.itemId]]
         else
-            -- print("nome: " .. Label_Text[ItemsIDs[slotData.itemId]])
+            if self.db.profile.flagDebug['DEBUG_FILTER'] then print("Item de nome \'" .. slotData.name .. "\' classificado como: \'" .. Label_Text[ItemsIDs[slotData.itemId]] .. "\'") end
             return Label_Text[ItemsIDs[slotData.itemId]]
         end
     else
-        --return "CATEGORIZAR"
+        if self.db.profile.flagDebug['DEBUG_CATEGORIZATION'] then
+            local equipSlot = slotData.equipSlot
+            if equipSlot and equipSlot ~= "" then
+            else
+                if self.db.profile.flagDebug['DEBUG_FILTER'] then print("Item de nome \'" .. slotData.name .. "\' sem categoria:. ID: \'" .. slotData.itemId .. "\'") end
+                return "Junk"
+            end
+        end
     end
 end
 
 function generalFilter:GetOptions()
 
-    local EXPANSION_PREFIX_TEXT = 'Expansion prefix'
-    local EXPANSION_PREFIX_DESC = 'Displays prefix of expansion before category name'
-    local ORGANIZE_BY_EXPANSION_TEXT = 'Organize by expansion'
-    local ORGANIZE_BY_EXPANSION_DESC = 'Group items according to the expansion that have been released'
-    local FORCE_ORGANIZE_BY_EXPANSION_TEXT = 'Force the organization by expansion'
-    local FORCE_ORGANIZE_BY_EXPANSION_DESC = 'Force grouping items so that they are sorted according to the expansion'
-    local OLD_EXPANSION_TEXT = 'Set as: Old expansion'
-    local OLD_EXPANSION_DESC = 'Groups items from the following expansions as: Old expansion'
-    local FORCE_OLD_EXPANSION_TEXT = 'Force Old expansion group'
-    local FORCE_OLD_EXPANSION_DESC = 'Force grouping from the following expansions as: Old expansion'
-    local FORCE_SUBCATEGORIES_TEXT = 'Force subgroup'
-    local FORCE_SUBCATEGORIES_DESC = 'This category will stay in a separate group (takes precedence over all other forcing tags)'
-    local SPLIT_TEXT = 'Split: '
-    local SUBCATEGORIES_DESC = 'Includes the following subcategories in the main filter'
-    local SPLIT_SUBCATEGORIES_DESC = 'Divides the following subcategories into specific filters'
+    local EXPANSION_PREFIX_TEXT = L['Expansion prefix']
+    local EXPANSION_PREFIX_DESC = L['Displays prefix of expansion before category name']
+    local ORGANIZE_BY_EXPANSION_TEXT = L['Organize by expansion']
+    local ORGANIZE_BY_EXPANSION_DESC = L['Group items according to the expansion that have been released']
+    local FORCE_ORGANIZE_BY_EXPANSION_TEXT = L['Force the organization by expansion']
+    local FORCE_ORGANIZE_BY_EXPANSION_DESC = L['Force grouping items so that they are sorted according to the expansion']
+    local OLD_EXPANSION_TEXT = L['Set as: Old expansion']
+    local OLD_EXPANSION_DESC = L['Groups items from the following expansions as: Old expansion']
+    local FORCE_OLD_EXPANSION_TEXT = L['Force Old expansion group']
+    local FORCE_OLD_EXPANSION_DESC = L['Force grouping from the following expansions as: Old expansion']
+    local FORCE_SUBCATEGORIES_TEXT = L['Force subgroup']
+    local FORCE_SUBCATEGORIES_DESC = L['This category will stay in a separate group (takes precedence over all other forcing tags)']
+    local SPLIT_TEXT = L['Split: ']
+    local SPLIT_SUBCATEGORIES_DESC = L['Divides the following subcategories into specific filters']
+    local DEBUG_TEXT = L['Debug']
+    local DEBUG_DESC = L['Show debug messages']
 
     return {
         flagExpansionPrefix = {
@@ -25467,6 +26082,32 @@ function generalFilter:GetOptions()
                 [CONS.LEGION_ID] = Label_Text[CONS.LEGION_ID],
                 [CONS.BATTLE_FOR_AZEROTH_ID] = Label_Text[CONS.BATTLE_FOR_AZEROTH_ID],
             }},
+        flagForceSubcategories = {
+            name = FORCE_SUBCATEGORIES_TEXT,
+            desc = FORCE_SUBCATEGORIES_DESC,
+            type = 'multiselect',
+            order = 09,
+            values = {
+                [CONS.CONTAINERS_ID] = Label_Text[CONS.CONTAINERS_ID],
+                [CONS.CONSUMABLES_ID] = Label_Text[CONS.CONSUMABLES_ID],
+                [CONS.CURRENCY_ID] = Label_Text[CONS.CURRENCY_ID],
+                [CONS.GEMS_ID] = Label_Text[CONS.GEMS_ID],
+                [CONS.GLYPHS_ID] = Label_Text[CONS.GLYPHS_ID],
+                [CONS.KEYS_ID] = Label_Text[CONS.KEYS_ID],
+                [CONS.MISCELLANEOUS_ID] = Label_Text[CONS.MISCELLANEOUS_ID],
+                [CONS.QUEST_ID] = Label_Text[CONS.QUEST_ID],
+                [CONS.RECIPES_ID] = Label_Text[CONS.RECIPES_ID],
+                [CONS.TRADE_GOODS_ID] = Label_Text[CONS.TRADE_GOODS_ID],
+
+                [CONS.ORDER_HALL_ID] = Label_Text[CONS.ORDER_HALL_ID],
+                [CONS.GARRISON_ID] = Label_Text[CONS.GARRISON_ID],
+                [CONS.ASHRAN_ID] = Label_Text[CONS.ASHRAN_ID],
+                [CONS.M_COMPANIONS_ID] = Label_Text[CONS.M_COMPANIONS_ID],
+                [CONS.M_TELEPORT_ID] = Label_Text[CONS.M_TELEPORT_ID],
+                [CONS.M_ARCHAEOLOGY_ID] = Label_Text[CONS.M_ARCHAEOLOGY_ID],
+                [CONS.T_FISHING_ID] = Label_Text[CONS.T_FISHING_ID],
+                [CONS.MH_DARKMOON_ID] = Label_Text[CONS.MH_DARKMOON_ID]
+            }},
         flagItemsSplit = {
             name = SPLIT_TEXT,
             desc = SPLIT_SUBCATEGORIES_DESC,
@@ -25475,7 +26116,7 @@ function generalFilter:GetOptions()
             values = {
                 [CONS.CONTAINERS_ID] = Label_Text[CONS.CONTAINERS_ID],
                 [CONS.CONSUMABLES_ID] = Label_Text[CONS.CONSUMABLES_ID],
-                -- [CONS.CURRENCY_ID] = Label_Text[CONS.CURRENCY_ID],
+                [CONS.CURRENCY_ID] = Label_Text[CONS.CURRENCY_ID],
                 [CONS.GEMS_ID] = Label_Text[CONS.GEMS_ID],
                 [CONS.GLYPHS_ID] = Label_Text[CONS.GLYPHS_ID],
                 [CONS.KEYS_ID] = Label_Text[CONS.KEYS_ID],
@@ -25488,7 +26129,7 @@ function generalFilter:GetOptions()
             name = SPLIT_TEXT .. Label_Text[CONS.CONSUMABLES_ID],
             desc = SPLIT_SUBCATEGORIES_DESC,
             type = 'multiselect',
-            order = 10,
+            order = 14,
             values = {
                 [CONS.C_BANDAGES_ID] = Label_Text[CONS.C_BANDAGES_ID],
                 [CONS.C_CONSUMABLES_ID] = Label_Text[CONS.C_CONSUMABLES_ID],
@@ -25504,7 +26145,7 @@ function generalFilter:GetOptions()
             name = SPLIT_TEXT .. Label_Text[CONS.GEMS_ID],
             desc = SPLIT_SUBCATEGORIES_DESC,
             type = 'multiselect',
-            order = 10,
+            order = 16,
             values = {
                 [CONS.G_RELIC_ID] = Label_Text[CONS.G_RELIC_ID]
             }},
@@ -25512,7 +26153,7 @@ function generalFilter:GetOptions()
             name = SPLIT_TEXT .. Label_Text[CONS.MISCELLANEOUS_ID],
             desc = SPLIT_SUBCATEGORIES_DESC,
             type = 'multiselect',
-            order = 10,
+            order = 19,
             values = {
                 [CONS.M_ARMOR_TOKENS_ID] = Label_Text[CONS.M_ARMOR_TOKENS_ID],
                 [CONS.M_HOLIDAY_ID] = Label_Text[CONS.M_HOLIDAY_ID],
@@ -25525,7 +26166,7 @@ function generalFilter:GetOptions()
             name = SPLIT_TEXT .. Label_Text[CONS.RECIPES_ID],
             desc = SPLIT_SUBCATEGORIES_DESC,
             type = 'multiselect',
-            order = 10,
+            order = 21,
             values = {
                 [CONS.R_BOOKS_ID] = Label_Text[CONS.R_BOOKS_ID],
                 [CONS.R_ALCHEMY_ID] = Label_Text[CONS.R_ALCHEMY_ID],
@@ -25545,7 +26186,7 @@ function generalFilter:GetOptions()
             name = SPLIT_TEXT .. Label_Text[CONS.TRADE_GOODS_ID],
             desc = SPLIT_SUBCATEGORIES_DESC,
             type = 'multiselect',
-            order = 10,
+            order = 22,
             values = {
                 [CONS.T_CLOTH_ID] = Label_Text[CONS.T_CLOTH_ID],
                 [CONS.T_ELEMENTAL_ID] = Label_Text[CONS.T_ELEMENTAL_ID],
@@ -25555,7 +26196,7 @@ function generalFilter:GetOptions()
                 [CONS.T_LEATHER_ID] = Label_Text[CONS.T_LEATHER_ID],
                 [CONS.T_MEAT_ID] = Label_Text[CONS.T_MEAT_ID],
                 [CONS.T_METAL_STONE_ID] = Label_Text[CONS.T_METAL_STONE_ID],
-                [CONS.CT_FISHING_ID] = Label_Text[CONS.CT_FISHING_ID],
+                [CONS.T_FISHING_ID] = Label_Text[CONS.T_FISHING_ID],
                 [CONS.T_OTHER_ID] = Label_Text[CONS.T_OTHER_ID],
             }},
         flagCookingSplit = {
@@ -25564,51 +26205,65 @@ function generalFilter:GetOptions()
             type = 'multiselect',
             order = 30,
             values = {
-                [CONS.CT_ANIMAL_ID] = Label_Text[CONS.CT_ANIMAL_ID],
-                [CONS.CT_EGG_ID] = Label_Text[CONS.CT_EGG_ID],
-                [CONS.CT_FISH_ID] = Label_Text[CONS.CT_FISH_ID],
+                [CONS.TM_ANIMAL_ID] = Label_Text[CONS.TM_ANIMAL_ID],
+                [CONS.TM_EGG_ID] = Label_Text[CONS.TM_EGG_ID],
+                [CONS.TM_FISH_ID] = Label_Text[CONS.TM_FISH_ID],
             }},
         flagPetSplit = {
             name = SPLIT_TEXT .. Label_Text[CONS.M_COMPANIONS_ID],
             desc = SPLIT_SUBCATEGORIES_DESC,
             type = 'multiselect',
-            order = 56,
+            order = 50,
             values = {
-                [CONS.PET_BATTLE_STONE_ID] = Label_Text[CONS.PET_BATTLE_STONE_ID],
-                [CONS.PET_CONSUMABLE_ID] = Label_Text[CONS.PET_CONSUMABLE_ID],
-                [CONS.PET_SUPPLIES_ID] = Label_Text[CONS.PET_SUPPLIES_ID],
-                [CONS.PET_TRAINING_STONE_ID] = Label_Text[CONS.PET_TRAINING_STONE_ID],
+                [CONS.MC_BATTLE_STONE_ID] = Label_Text[CONS.MC_BATTLE_STONE_ID],
+                [CONS.MC_CONSUMABLE_ID] = Label_Text[CONS.MC_CONSUMABLE_ID],
+                [CONS.MC_SUPPLIES_ID] = Label_Text[CONS.MC_SUPPLIES_ID],
+                [CONS.MC_TRAINING_STONE_ID] = Label_Text[CONS.MC_TRAINING_STONE_ID],
             }},
-        flagForceSubcategories = {
-            name = FORCE_SUBCATEGORIES_TEXT,
-            desc = FORCE_SUBCATEGORIES_DESC,
+        flagOrderHallSplit = {
+            name = SPLIT_TEXT .. Label_Text[CONS.ORDER_HALL_ID],
+            desc = SPLIT_SUBCATEGORIES_DESC,
             type = 'multiselect',
-            order = 56,
+            order = 87,
             values = {
-                -- [GARRISON_ID] = Label_Text[GARRISON_ID],
-                -- [ASHRAN_ID] = Label_Text[ASHRAN_ID],
+                [CONS.O_CHAMPION_ARMOR_ID] = Label_Text[CONS.O_CHAMPION_ARMOR_ID],
+                [CONS.O_CHAMPION_EQUIPMENT_ID] = Label_Text[CONS.O_CHAMPION_EQUIPMENT_ID],
+                [CONS.O_CHESTS_ID] = Label_Text[CONS.O_CHESTS_ID],
+                [CONS.O_CONSUMABLES_ID] = Label_Text[CONS.O_CONSUMABLES_ID],
+                [CONS.O_TROOPS_ID] = Label_Text[CONS.O_TROOPS_ID],
             }},
-        -- flagGarrisonSplit = {
-        --     name = SPLIT_TEXT .. Label_Text[GARRISON_ID],
-        --     desc = SPLIT_SUBCATEGORIES_DESC,
-        --     type = 'multiselect',
-        --     order = 56,
-        --     values = {
-        --         [GARRISON_BLUEPRINTS_ID] = Label_Text[GARRISON_BLUEPRINTS_ID],
-        --         [GARRISON_FOLLOWERS_ID] = Label_Text[GARRISON_FOLLOWERS_ID],
-        --         [GARRISON_IRONHORDE_ID] = Label_Text[GARRISON_IRONHORDE_ID],
-        --         [GARRISON_MINING_ID] = Label_Text[GARRISON_MINING_ID],
-        --         [GARRISON_SHIPYARD_ID] = Label_Text[GARRISON_SHIPYARD_ID],
-        --         [GARRISON_WORKORDERS_ID] = Label_Text[GARRISON_WORKORDERS_ID],
-        --     }},
-        -- flagAshranSplit = {
-        --     name = SPLIT_TEXT .. Label_Text[ASHRAN_ID],
-        --     desc = SPLIT_SUBCATEGORIES_DESC,
-        --     type = 'multiselect',
-        --     order = 56,
-        --     values = {
-        --         [ASHRAN_ID] = Label_Text[ASHRAN_ID],
-        --         [ASHRAN_BOOKS_ID] = Label_Text[ASHRAN_BOOKS_ID],
-        --     }},
+        flagGarrisonSplit = {
+            name = SPLIT_TEXT .. Label_Text[CONS.GARRISON_ID],
+            desc = SPLIT_SUBCATEGORIES_DESC,
+            type = 'multiselect',
+            order = 88,
+            values = {
+                [CONS.G_BLUEPRINTS_ID] = Label_Text[CONS.G_BLUEPRINTS_ID],
+                [CONS.G_FOLLOWERS_ID] = Label_Text[CONS.G_FOLLOWERS_ID],
+                [CONS.G_IRONHORDE_ID] = Label_Text[CONS.G_IRONHORDE_ID],
+                [CONS.G_MINING_ID] = Label_Text[CONS.G_MINING_ID],
+                [CONS.G_SHIPYARD_ID] = Label_Text[CONS.G_SHIPYARD_ID],
+                [CONS.G_WORKORDERS_ID] = Label_Text[CONS.G_WORKORDERS_ID],
+            }},
+        flagAshranSplit = {
+            name = SPLIT_TEXT .. Label_Text[CONS.ASHRAN_ID],
+            desc = SPLIT_SUBCATEGORIES_DESC,
+            type = 'multiselect',
+            order = 89,
+            values = {
+                [CONS.ASHRAN_ID] = Label_Text[CONS.ASHRAN_ID],
+                [CONS.A_BOOKS_ID] = Label_Text[CONS.A_BOOKS_ID],
+            }},
+        flagDebug = {
+            name = DEBUG_TEXT,
+            desc = DEBUG_DESC,
+            type = 'multiselect',
+            order = 99,
+            values = {
+                DEBUG_FILTER = L['Filter'],
+                DEBUG_CLASSIFICATION = L['Classification'],
+                DEBUG_INITIALIZATION = L['Initialization'],
+                DEBUG_CATEGORIZATION = L['Categorization'],
+            }},
     }, AdiBags:GetOptionHandler(self, false, function() return self:Update() end)
 end

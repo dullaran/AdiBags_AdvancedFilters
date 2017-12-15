@@ -8,3 +8,4 @@
 
 Localization.lua
 AdiBags_AdvancedFilters.lua
+AdiBags_EquipmentFIlter.lua
