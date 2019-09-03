@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80200
 
 ## Title: AdiBags Extended Filters
 ## Notes: Adds an extra filters to AdiBags.
@@ -8,4 +8,3 @@
 
 Localization.lua
 AdiBags_AdvancedFilters.lua
-AdiBags_EquipmentFIlter.lua
